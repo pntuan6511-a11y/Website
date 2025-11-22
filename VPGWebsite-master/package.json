@@ -32,6 +32,7 @@
     "clsx": "^2.0.0",
     "date-fns": "^3.0.6",
     "flatpickr": "^4.6.13",
+    "lightgallery": "^2.9.0",
     "next": "14.0.4",
     "next-auth": "^4.24.5",
     "nodemailer": "^7.0.10",

@@ -6,12 +6,28 @@ import Toast from '@/components/Toast'
 import { useSettings } from '@/context/SettingsContext'
 import { formatPhoneNumber } from '@/utils/format'
 
+// Swiper imports
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { FreeMode, Navigation, Thumbs, Autoplay } from 'swiper/modules'
+import 'swiper/css'
+import 'swiper/css/free-mode'
+import 'swiper/css/navigation'
+import 'swiper/css/thumbs'
+
+// LightGallery imports
+import LightGallery from 'lightgallery/react'
+import lgThumbnail from 'lightgallery/plugins/thumbnail'
+import lgZoom from 'lightgallery/plugins/zoom'
+import 'lightgallery/css/lightgallery.css'
+import 'lightgallery/css/lg-zoom.css'
+import 'lightgallery/css/lg-thumbnail.css'
+
 interface CarDetailClientProps {
   car: any
 }
 
 export default function CarDetailClient({ car }: CarDetailClientProps) {
-  const [currentImage, setCurrentImage] = useState(0)
+  const [thumbsSwiper, setThumbsSwiper] = useState<any>(null)
   const [showPriceQuoteModal, setShowPriceQuoteModal] = useState(false)
   const [showTestDriveModal, setShowTestDriveModal] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -57,13 +73,13 @@ export default function CarDetailClient({ car }: CarDetailClientProps) {
     }
   }
 
-  useEffect(() => {
-    if (dismissedPopup || showPriceQuoteModal) return
-    const t = setTimeout(() => {
-      setShowPriceQuoteModal(true)
-    }, 5000)
-    return () => clearTimeout(t)
-  }, [dismissedPopup, showPriceQuoteModal])
+  // useEffect(() => {
+  //   if (dismissedPopup || showPriceQuoteModal) return
+  //   const t = setTimeout(() => {
+  //     setShowPriceQuoteModal(true)
+  //   }, 5000)
+  //   return () => clearTimeout(t)
+  // }, [dismissedPopup, showPriceQuoteModal])
 
   const handleTestDrive = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -108,34 +124,88 @@ export default function CarDetailClient({ car }: CarDetailClientProps) {
       <div className="container-custom">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           {/* Image Slider */}
+          {/* Image Slider */}
           <div>
             {images.length > 0 && (
               <>
-                <div className="relative h-96 mb-4">
-                  <Image
-                    src={images[currentImage].imageUrl}
-                    alt={car.name}
-                    fill
-                    className="object-cover rounded-lg"
-                  />
-                </div>
-                {images.length > 1 && (
-                  <div className="grid grid-cols-4 gap-2">
+                <LightGallery
+                  speed={500}
+                  plugins={[lgThumbnail, lgZoom]}
+                  elementClassNames=""
+                  selector=".gallery-item"
+                >
+                  <Swiper
+                    spaceBetween={10}
+                    navigation={{
+                      nextEl: '.swiper-button-next-custom',
+                      prevEl: '.swiper-button-prev-custom',
+                    }}
+                    autoplay={{
+                      delay: 2500,
+                      disableOnInteraction: false,
+                    }}
+                    thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
+                    modules={[FreeMode, Navigation, Thumbs, Autoplay]}
+                    className="h-96 mb-4 rounded-lg group relative"
+                  >
                     {images.map((img: any, index: number) => (
-                      <button
-                        key={index}
-                        onClick={() => setCurrentImage(index)}
-                        className={`relative h-20 rounded ${index === currentImage ? 'ring-2 ring-luxury-gold' : ''}`}
-                      >
-                        <Image
-                          src={img.imageUrl}
-                          alt={`${car.name} ${index + 1}`}
-                          fill
-                          className="object-cover rounded"
-                        />
-                      </button>
+                      <SwiperSlide key={index}>
+                        <a
+                          href={img.imageUrl}
+                          data-src={img.imageUrl}
+                          className="gallery-item block relative w-full h-full cursor-zoom-in"
+                        >
+                          <Image
+                            src={img.imageUrl}
+                            alt={`${car.name} ${index + 1}`}
+                            fill
+                            className="object-cover"
+                          />
+                        </a>
+                      </SwiperSlide>
                     ))}
-                  </div>
+
+                    {/* Custom Navigation Buttons */}
+                    <div className="swiper-button-prev-custom absolute left-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white/80 hover:bg-white rounded-full flex items-center justify-center cursor-pointer shadow-md transition-all text-luxury-charcoal opacity-0 group-hover:opacity-100">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                      </svg>
+                    </div>
+                    <div className="swiper-button-next-custom absolute right-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white/80 hover:bg-white rounded-full flex items-center justify-center cursor-pointer shadow-md transition-all text-luxury-charcoal opacity-0 group-hover:opacity-100">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                      </svg>
+                    </div>
+                  </Swiper>
+                </LightGallery>
+
+                {images.length > 1 && (
+                  <Swiper
+                    onSwiper={setThumbsSwiper}
+                    spaceBetween={10}
+                    slidesPerView={4}
+                    freeMode={true}
+                    autoplay={{
+                      delay: 2500,
+                      disableOnInteraction: false,
+                    }}
+                    watchSlidesProgress={true}
+                    modules={[FreeMode, Navigation, Thumbs]}
+                    className="thumbs-swiper h-24"
+                  >
+                    {images.map((img: any, index: number) => (
+                      <SwiperSlide key={index}>
+                        <div className="relative w-full h-full cursor-pointer rounded-md overflow-hidden max-w-[120px] lg:max-w-[150px]">
+                          <Image
+                            src={img.imageUrl}
+                            alt={`${car.name} thumb ${index + 1}`}
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
                 )}
               </>
             )}
@@ -175,9 +245,9 @@ export default function CarDetailClient({ car }: CarDetailClientProps) {
                         <th className="px-6 py-4 text-right text-xl">Giá (VNĐ)</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="[&>tr:nth-child(even)]:bg-[#f2f2f2]">
                       {car.versions.map((version: any, index: number) => (
-                        <tr key={version.id} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
+                        <tr key={version.id}>
                           <td className="px-6 py-4 text-xl">{version.name}</td>
                           <td className="px-6 py-4 text-right font-semibold text-luxury-gold text-xl">
                             {Number(version.price).toLocaleString('vi-VN')}
@@ -209,9 +279,9 @@ export default function CarDetailClient({ car }: CarDetailClientProps) {
                     <th className="px-6 py-4 text-right">Giá (VNĐ)</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className=" [&>tr:nth-child(even)]:bg-[#f2f2f2]">
                   {car.versions.map((version: any, index: number) => (
-                    <tr key={version.id} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
+                    <tr key={version.id}>
                       <td className="px-6 py-4">{version.name}</td>
                       <td className="px-6 py-4 text-right font-semibold text-luxury-gold">
                         {Number(version.price).toLocaleString('vi-VN')}
