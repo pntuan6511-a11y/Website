@@ -32,7 +32,7 @@ export default function Footer() {
             <div className="space-y-2 text-md text-gray-400 mt-3">
               <p>Địa chỉ: Số 2070, Trần Hưng Đạo, Mỹ Thới, An Giang</p>
               {contactAdmin && <p>Điện thoại: <a href={`tel:${contactAdmin.replace(/\D/g, '')}`} className="hover:text-luxury-gold">{formatPhoneNumber(contactAdmin)}</a></p>}
-              {mst && <a href={lmst} target='_blank'>MST/MSDN: <span className='text-luxury-gold'>{mst}</span></a>}
+              {mst && <p><a href={lmst} target='_blank'>MST/MSDN: <span className='text-luxury-gold'>{mst}</span></a></p>}
               {/* <p>Email: info@VFGauto.vn</p> */}
             </div>
           </div>
