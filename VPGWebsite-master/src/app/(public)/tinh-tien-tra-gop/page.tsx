@@ -1,6 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useSettings } from '@/context/SettingsContext'
+import { formatPhoneNumber } from '@/utils/format'
 
 export default function InstallmentCalculatorPage() {
   const [cars, setCars] = useState<any[]>([])
@@ -10,6 +12,7 @@ export default function InstallmentCalculatorPage() {
   const [years, setYears] = useState(8)
   const [interestRate, setInterestRate] = useState(6.8)
   const [result, setResult] = useState<any>(null)
+  const { contactAdmin } = useSettings()
 
   useEffect(() => {
     fetch('/api/cars')
@@ -40,33 +43,54 @@ export default function InstallmentCalculatorPage() {
     const monthlyRate = interestRate / 100 / 12
     const months = years * 12
 
-    const monthlyPayment = loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1)
+    // Tiền gốc trả hàng tháng (cố định)
+    const monthlyPrincipal = loanAmount / months
 
     const schedule = []
-    let remainingBalance = loanAmount
+    let currentBalance = loanAmount
+    let totalInterest = 0
+
+    // Thêm tháng 0
+    schedule.push({
+      month: 0,
+      remainingBalance: currentBalance,
+      principalPayment: 0,
+      interestPayment: 0,
+      total: 0
+    })
 
     for (let month = 1; month <= months; month++) {
-      const interestPayment = remainingBalance * monthlyRate
-      const principalPayment = monthlyPayment - interestPayment
-      
+      // Lãi hàng tháng = Dư nợ đầu kỳ * Lãi suất tháng
+      const interestPayment = currentBalance * monthlyRate
+
+      // Trừ gốc để ra dư nợ cuối kỳ
+      currentBalance -= monthlyPrincipal
+      if (currentBalance < 0) currentBalance = 0 // Xử lý làm tròn
+
+      // Tổng trả tháng này = Gốc + Lãi
+      const totalMonthlyPayment = monthlyPrincipal + interestPayment
+
       schedule.push({
         month,
-        remainingBalance: remainingBalance,
-        principalPayment,
-        interestPayment,
-        total: monthlyPayment
+        remainingBalance: currentBalance, // Hiển thị dư nợ cuối kỳ như trong hình
+        principalPayment: monthlyPrincipal,
+        interestPayment: interestPayment,
+        total: totalMonthlyPayment
       })
 
-      remainingBalance -= principalPayment
+      totalInterest += interestPayment
     }
+
+    // Lấy số tiền trả tháng đầu tiên để hiển thị (cao nhất)
+    const firstMonthPayment = schedule[1].total // schedule[0] là tháng 0
 
     setResult({
       carPrice: price,
       downPayment,
       loanAmount,
-      monthlyPayment,
-      totalPayment: monthlyPayment * months,
-      totalInterest: (monthlyPayment * months) - loanAmount,
+      monthlyPayment: firstMonthPayment,
+      totalPayment: loanAmount + totalInterest,
+      totalInterest: totalInterest,
       schedule
     })
   }
@@ -81,7 +105,7 @@ export default function InstallmentCalculatorPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block mb-2 font-medium">Chọn mẫu xe</label>
-                <select 
+                <select
                   className="input-custom"
                   onChange={(e) => handleCarChange(e.target.value)}
                   value={selectedCar?.id || ''}
@@ -95,7 +119,7 @@ export default function InstallmentCalculatorPage() {
 
               <div>
                 <label className="block mb-2 font-medium">Chọn phiên bản</label>
-                <select 
+                <select
                   className="input-custom"
                   onChange={(e) => handleVersionChange(e.target.value)}
                   value={selectedVersion?.id || ''}
@@ -111,7 +135,14 @@ export default function InstallmentCalculatorPage() {
               </div>
 
               <div>
-                <label className="block mb-2 font-medium">Số tiền vay: {loanPercent}%</label>
+                <label className="block mb-2 font-medium">
+                  Số tiền vay: {loanPercent}%
+                  {selectedVersion && (
+                    <span className="text-luxury-gold ml-2">
+                      (Tương đương: {(Number(selectedVersion.price) * loanPercent / 100).toLocaleString('vi-VN')} VNĐ)
+                    </span>
+                  )}
+                </label>
                 <input
                   type="range"
                   min="10"
@@ -170,7 +201,7 @@ export default function InstallmentCalculatorPage() {
               </div>
             </div>
 
-            <button 
+            <button
               onClick={calculateInstallment}
               disabled={!selectedVersion}
               className="btn-primary w-full mt-6 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -197,7 +228,7 @@ export default function InstallmentCalculatorPage() {
                     <p className="text-xl font-semibold">{result.loanAmount.toLocaleString('vi-VN')} VNĐ</p>
                   </div>
                   <div>
-                    <p className="text-gray-600">Trả hàng tháng</p>
+                    <p className="text-gray-600">Trả tháng đầu (cao nhất)</p>
                     <p className="text-2xl font-bold text-luxury-gold">{result.monthlyPayment.toLocaleString('vi-VN')} VNĐ</p>
                   </div>
                   <div>
@@ -209,31 +240,43 @@ export default function InstallmentCalculatorPage() {
                     <p className="text-xl font-semibold">{result.totalPayment.toLocaleString('vi-VN')} VNĐ</p>
                   </div>
                 </div>
+
+                <p className="text-center text-gray-500 italic mt-4 border-t pt-4">
+                  * Lưu ý: Kết quả chỉ mang tính chất tham khảo. Vui lòng liên hệ hotline <a href={`tel:${contactAdmin.replace(/\D/g, '')}`} className="font-bold text-luxury-gold hover:underline">{formatPhoneNumber(contactAdmin)}</a> để được tư vấn nhiệt tình và chính xác nhất.
+                </p>
               </div>
 
               <div className="card-luxury p-8">
                 <h2 className="text-2xl font-bold mb-4">Lịch trả góp chi tiết</h2>
                 <div className="overflow-x-auto">
-                  <table className="w-full">
+                  <table className="w-full border-collapse">
                     <thead className="bg-luxury-charcoal text-white">
                       <tr>
-                        <th className="px-4 py-3 text-left">Tháng</th>
-                        <th className="px-4 py-3 text-right">Dư nợ đầu kì</th>
-                        <th className="px-4 py-3 text-right">Trả gốc</th>
-                        <th className="px-4 py-3 text-right">Trả lãi</th>
-                        <th className="px-4 py-3 text-right">Gốc + Lãi</th>
+                        <th className="px-4 py-3 text-center border border-gray-600">Số tháng</th>
+                        <th className="px-4 py-3 text-left border border-gray-600">Dư nợ đầu kì</th>
+                        <th className="px-4 py-3 text-left border border-gray-600">Trả gốc hàng tháng</th>
+                        <th className="px-4 py-3 text-left border border-gray-600">Trả lãi hàng tháng</th>
+                        <th className="px-4 py-3 text-left border border-gray-600">Gốc + Lãi</th>
                       </tr>
                     </thead>
                     <tbody>
                       {result.schedule.map((row: any, index: number) => (
-                        <tr key={row.month} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
-                          <td className="px-4 py-2">{row.month}</td>
-                          <td className="px-4 py-2 text-right">{row.remainingBalance.toLocaleString('vi-VN')}</td>
-                          <td className="px-4 py-2 text-right">{row.principalPayment.toLocaleString('vi-VN')}</td>
-                          <td className="px-4 py-2 text-right">{row.interestPayment.toLocaleString('vi-VN')}</td>
-                          <td className="px-4 py-2 text-right font-semibold">{row.total.toLocaleString('vi-VN')}</td>
+                        <tr key={row.month} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                          <td className="px-4 py-2 text-center border border-gray-200">{row.month}</td>
+                          <td className="px-4 py-2 text-left border border-gray-200">{Math.round(row.remainingBalance).toLocaleString('vi-VN')}</td>
+                          <td className="px-4 py-2 text-left border border-gray-200">{Math.round(row.principalPayment).toLocaleString('vi-VN')}</td>
+                          <td className="px-4 py-2 text-left border border-gray-200">{Math.round(row.interestPayment).toLocaleString('vi-VN')}</td>
+                          <td className="px-4 py-2 text-left border border-gray-200 font-semibold">{Math.round(row.total).toLocaleString('vi-VN')}</td>
                         </tr>
                       ))}
+                      {/* Dòng tổng cộng */}
+                      <tr className="bg-white font-bold text-red-500">
+                        <td className="px-4 py-2 text-center border border-gray-200"></td>
+                        <td className="px-4 py-2 text-left border border-gray-200"></td>
+                        <td className="px-4 py-2 text-left border border-gray-200">{Math.round(result.loanAmount).toLocaleString('vi-VN')}</td>
+                        <td className="px-4 py-2 text-left border border-gray-200">{Math.round(result.totalInterest).toLocaleString('vi-VN')}</td>
+                        <td className="px-4 py-2 text-left border border-gray-200">{Math.round(result.totalPayment).toLocaleString('vi-VN')}</td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>

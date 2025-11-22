@@ -4,6 +4,8 @@ import './globals.css'
 // Quill editor styles (global). Ensure `react-quill` is installed in the project.
 import 'react-quill/dist/quill.snow.css'
 import { generateSEO, generateOrganizationStructuredData } from '@/lib/seo'
+import AuthProvider from '@/components/AuthProvider'
+import { SettingsProvider } from '@/context/SettingsContext'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
@@ -35,7 +37,11 @@ export default function RootLayout({
         />
       </head>
       <body className={inter.variable}>
-        {children}
+        <AuthProvider>
+          <SettingsProvider>
+            {children}
+          </SettingsProvider>
+        </AuthProvider>
       </body>
     </html>
   )

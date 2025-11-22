@@ -2,34 +2,20 @@
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { useSettings } from '@/context/SettingsContext'
+import { formatPhoneNumber } from '@/utils/format'
 
 export default function Footer() {
   const [cars, setCars] = useState<any[]>([])
-  const [contactAdmin, setContactAdmin] = useState('')
-  const [mst, setMstAdmin] = useState('')
-  const [lmst, setLmstAdmin] = useState('')
+  const { contactAdmin, getSetting } = useSettings()
+  const mst = getSetting('MST_ADMIN')
+  const lmst = getSetting('LMST_ADMIN')
 
   useEffect(() => {
     fetch('/api/cars')
       .then(res => res.json())
       .then(data => setCars(data))
       .catch(err => console.error(err))
-  }, [])
-
-  useEffect(() => {
-    fetch('/api/settings')
-      .then((r) => r.json())
-      .then((data) => {
-        if (Array.isArray(data)) {
-          const contactA = data.find((s: any) => s.key === 'CONTACT_ADMIN')
-          const mst = data.find((s: any) => s.key === 'MST_ADMIN')
-          const lmst = data.find((s: any) => s.key === 'LMST_ADMIN')
-          setContactAdmin(contactA?.value || '')
-          setMstAdmin(mst?.value || '')
-          setLmstAdmin(lmst?.value || '')
-        }
-      })
-      .catch(() => {})
   }, [])
 
   return (
@@ -45,7 +31,7 @@ export default function Footer() {
             </p>
             <div className="space-y-2 text-sm text-gray-400 mt-3">
               <p>Địa chỉ: Số 2070, Trần Hưng Đạo, Mỹ Thới, An Giang</p>
-              {contactAdmin && <p>Điện thoại: {contactAdmin}</p>}
+              {contactAdmin && <p>Điện thoại: <a href={`tel:${contactAdmin.replace(/\D/g, '')}`} className="hover:text-luxury-gold">{formatPhoneNumber(contactAdmin)}</a></p>}
               {mst && <a href={lmst} target='_blank'>MST/MSDN: <span className='text-luxury-gold'>{mst}</span></a>}
               {/* <p>Email: info@vpgauto.vn</p> */}
             </div>

@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Toast from '@/components/Toast'
+import { useSettings } from '@/context/SettingsContext'
+import { formatPhoneNumber } from '@/utils/format'
 
 interface CarDetailClientProps {
   car: any
@@ -14,8 +16,8 @@ export default function CarDetailClient({ car }: CarDetailClientProps) {
   const [showTestDriveModal, setShowTestDriveModal] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [toast, setToast] = useState({ visible: false, message: '' })
-  const [contactAdmin, setContactAdmin] = useState('quản trị viên')
   const [dismissedPopup, setDismissedPopup] = useState(false)
+  const { contactAdmin } = useSettings()
 
   const handlePriceQuote = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -54,19 +56,6 @@ export default function CarDetailClient({ car }: CarDetailClientProps) {
       setIsSubmitting(false)
     }
   }
-
-  useEffect(() => {
-    // fetch CONTACT_ADMIN from settings
-    fetch('/api/settings')
-      .then((r) => r.json())
-      .then((data) => {
-        if (Array.isArray(data)) {
-          const contactA = data.find((s: any) => s.key === 'CONTACT_ADMIN')
-          setContactAdmin(contactA?.value || '')
-        }
-      })
-      .catch(() => {})
-  }, [])
 
   useEffect(() => {
     if (dismissedPopup || showPriceQuoteModal) return
@@ -111,7 +100,7 @@ export default function CarDetailClient({ car }: CarDetailClientProps) {
 
   const galleryImages = car.images?.filter((img: any) => img.imageType === 'gallery') || []
   const mainImage = car.images?.find((img: any) => img.imageType === 'main')?.imageUrl || car.mainImage
-  const images = galleryImages.length > 0 ? galleryImages : (mainImage ? [{imageUrl: mainImage}] : [])
+  const images = galleryImages.length > 0 ? galleryImages : (mainImage ? [{ imageUrl: mainImage }] : [])
 
   return (
     <div className="py-16">
@@ -160,15 +149,15 @@ export default function CarDetailClient({ car }: CarDetailClientProps) {
                 Từ {Number(car.versions[0].price).toLocaleString('vi-VN')} VNĐ
               </p>
             )}
-            
+
             <div className="flex gap-4 mb-8">
-              <button 
+              <button
                 onClick={() => setShowPriceQuoteModal(true)}
                 className="btn-primary flex-1"
               >
                 Nhận báo giá
               </button>
-              <button 
+              <button
                 onClick={() => setShowTestDriveModal(true)}
                 className="btn-outline flex-1"
               >
@@ -256,7 +245,7 @@ export default function CarDetailClient({ car }: CarDetailClientProps) {
               </div>
 
               <div className="mb-4 text-sm text-gray-700">
-                Quý khách vui lòng liên hệ {contactAdmin || 'quản trị viên'} hoặc điền vào biểu mẫu dưới đây.
+                Quý khách vui lòng liên hệ {contactAdmin ? <a href={`tel:${contactAdmin.replace(/\D/g, '')}`} className="font-bold text-luxury-gold hover:underline">{formatPhoneNumber(contactAdmin)}</a> : 'quản trị viên'} hoặc điền vào biểu mẫu dưới đây.
               </div>
 
               <div className="flex gap-3">

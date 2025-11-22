@@ -1,27 +1,19 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useSettings } from '@/context/SettingsContext'
+import { formatPhoneNumber } from '@/utils/format'
 
 export default function ContactBubbles() {
-  const [contact, setContact] = useState({ contactAdmin: '', zalo: '', facebook: '' })
+  const { contactAdmin, getSetting } = useSettings()
+  const zalo = getSetting('ZALO_ADMIN')
+  const facebook = getSetting('FACEBOOK_ADMIN')
 
-  useEffect(() => {
-    fetch('/api/settings')
-      .then((r) => r.json())
-      .then((data) => {
-        if (Array.isArray(data)) {
-          const contactA = data.find((s: any) => s.key === 'CONTACT_ADMIN')
-          const zalo = data.find((s: any) => s.key === 'ZALO_ADMIN')
-          const fb = data.find((s: any) => s.key === 'FACEBOOK_ADMIN')
-          setContact({
-            contactAdmin: contactA?.value || '',
-            zalo: zalo?.value || '',
-            facebook: fb?.value || ''
-          })
-        }
-      })
-      .catch(() => { })
-  }, [])
+  const contact = {
+    contactAdmin,
+    zalo,
+    facebook
+  }
 
   const items: { key: string; value: string; href?: string; bg: string; icon: React.ReactNode; target?: string }[] = []
 
@@ -59,10 +51,10 @@ export default function ContactBubbles() {
     })
   }
   if (contact.contactAdmin) {
-    const tel = contact.contactAdmin
+    const tel = contact.contactAdmin.replace(/\D/g, '')
     items.push({
       key: 'contact',
-      value: contact.contactAdmin,
+      value: formatPhoneNumber(contact.contactAdmin),
       href: `tel:${tel}`,
       bg: 'bg-[red]',
       icon: (

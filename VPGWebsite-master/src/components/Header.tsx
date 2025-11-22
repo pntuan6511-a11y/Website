@@ -51,7 +51,7 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3">
             <img
-              src="/default/vinfastlogo.png"
+              src="/default/vinfastlogo.jpg"
               alt="VinFast Logo"
               className="h-12 w-auto"
             />
@@ -152,11 +152,11 @@ export default function Header() {
             {/* Panel (2/3 width) - use translate-x for slide animation */}
             <aside className={`relative ml-auto h-full w-2/3 max-w-[420px] bg-white shadow-lg transform transition-transform duration-300 ease-in-out ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
               <div className="flex items-center justify-between p-4 border-b">
-               <img
-              src="/default/vinfastlogo.png"
-              alt="VinFast Logo"
-              className="h-6 w-auto"
-            />
+                <img
+                  src="/default/vinfastlogo.jpg"
+                  alt="VinFast Logo"
+                  className="h-6 w-auto"
+                />
                 <button aria-label="Đóng" onClick={() => setIsMenuOpen(false)} className="text-luxury-charcoal">
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -200,7 +200,7 @@ export default function Header() {
                     Dự toán chi phí
                   </Link>
 
-                  
+
                 </nav>
               </div>
             </aside>
