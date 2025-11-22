@@ -25,15 +25,15 @@ export default function Footer() {
           {/* Logo & Company Info */}
           <div>
             <div className="text-2xl font-bold text-white mb-2">Vinfast VFG An Giang</div>
-            {/* <h3 className="font-semibold mb-2">Công ty TNHH VinFast VPG An Giang</h3> */}
+            {/* <h3 className="font-semibold mb-2">Công ty TNHH VinFast VFG An Giang</h3> */}
             <p className="text-gray-400 text-sm text-luxury-cream">
               Đại lý ủy quyền chính thức của VinFast tại An Giang
             </p>
-            <div className="space-y-2 text-sm text-gray-400 mt-3">
+            <div className="space-y-2 text-md text-gray-400 mt-3">
               <p>Địa chỉ: Số 2070, Trần Hưng Đạo, Mỹ Thới, An Giang</p>
               {contactAdmin && <p>Điện thoại: <a href={`tel:${contactAdmin.replace(/\D/g, '')}`} className="hover:text-luxury-gold">{formatPhoneNumber(contactAdmin)}</a></p>}
               {mst && <a href={lmst} target='_blank'>MST/MSDN: <span className='text-luxury-gold'>{mst}</span></a>}
-              {/* <p>Email: info@vpgauto.vn</p> */}
+              {/* <p>Email: info@VFGauto.vn</p> */}
             </div>
           </div>
 
@@ -49,7 +49,7 @@ export default function Footer() {
           {/* Products */}
           <div>
             <h3 className="font-semibold mb-4">Sản phẩm</h3>
-            <ul className="space-y-2 text-sm text-gray-400">
+            <ul className="space-y-2 text-md text-gray-400">
               {cars.slice(0, 5).map((car) => (
                 <li key={car.id}>
                   <Link href={`/cars/${car.slug}`} className="hover:text-luxury-gold transition-colors">
@@ -63,7 +63,7 @@ export default function Footer() {
           {/* Quick Links */}
           <div>
             <h3 className="font-semibold mb-4">Liên kết nhanh</h3>
-            <ul className="space-y-2 text-sm text-gray-400">
+            <ul className="space-y-2 text-md text-gray-400">
               <li>
                 <Link href="/" className="hover:text-luxury-gold transition-colors">
                   Trang chủ

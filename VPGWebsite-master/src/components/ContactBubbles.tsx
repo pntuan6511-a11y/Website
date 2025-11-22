@@ -110,7 +110,7 @@ export default function ContactBubbles() {
               <span style={{ display: 'inline-block', animation: `shake 1.2s ${delay} infinite ease-in-out` }}>{it.icon}</span>
             </a>
             {it.key === 'contact' ? (
-              <span style={{ backgroundColor: "red" }} className="-mr-3 lg:mr-0 lg:-ml-3 px-3 py-2 pr-6 pl-3 lg:pl-6 lg:pr-3 rounded-l-full lg:rounded-l-none lg:rounded-r-full text-sm bg-white/95 text-white shadow-sm max-w-xs truncate card-luxury">
+              <span style={{ backgroundColor: "red" }} className="-mr-3 lg:mr-0 lg:-ml-3 px-3 py-2 pr-6 pl-3 lg:pl-6 lg:pr-3 rounded-l-full lg:rounded-l-none lg:rounded-r-full text-base font-bold bg-white/95 text-white shadow-sm max-w-xs truncate card-luxury">
                 {it.value}
               </span>
             ) : null}

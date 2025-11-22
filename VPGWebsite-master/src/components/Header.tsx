@@ -56,7 +56,7 @@ export default function Header() {
               className="h-12 w-auto"
             />
             {/* <div className="flex flex-col">
-              <span className="text-base font-bold text-luxury-charcoal leading-tight">VinFast VPG An Giang</span>
+              <span className="text-base font-bold text-luxury-charcoal leading-tight">VinFast VFG An Giang</span>
             </div> */}
           </Link>
 

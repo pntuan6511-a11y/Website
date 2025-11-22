@@ -171,15 +171,15 @@ export default function CarDetailClient({ car }: CarDetailClientProps) {
                   <table className="w-full bg-white shadow-lg rounded-lg overflow-hidden">
                     <thead className="bg-luxury-charcoal text-white">
                       <tr>
-                        <th className="px-6 py-4 text-left">Phiên bản</th>
-                        <th className="px-6 py-4 text-right">Giá (VNĐ)</th>
+                        <th className="px-6 py-4 text-left text-xl">Phiên bản</th>
+                        <th className="px-6 py-4 text-right text-xl">Giá (VNĐ)</th>
                       </tr>
                     </thead>
                     <tbody>
                       {car.versions.map((version: any, index: number) => (
                         <tr key={version.id} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
-                          <td className="px-6 py-4">{version.name}</td>
-                          <td className="px-6 py-4 text-right font-semibold text-luxury-gold">
+                          <td className="px-6 py-4 text-xl">{version.name}</td>
+                          <td className="px-6 py-4 text-right font-semibold text-luxury-gold text-xl">
                             {Number(version.price).toLocaleString('vi-VN')}
                           </td>
                         </tr>

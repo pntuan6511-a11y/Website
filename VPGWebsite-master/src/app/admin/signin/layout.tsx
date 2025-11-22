@@ -20,7 +20,7 @@ export default function SignInLayout({
                                     VFG An Giang
                                 </h2>
                                 <p className="text-center text-gray-200 dark:text-white/60">
-                                    Hệ thống quản trị website VPG Auto - Nền tảng quản lý xe hơi chuyên nghiệp
+                                    Hệ thống quản trị website VFG Auto - Nền tảng quản lý xe hơi chuyên nghiệp
                                 </p>
                             </div>
                         </div>
