@@ -164,7 +164,31 @@ export default function CarDetailClient({ car }: CarDetailClientProps) {
                 Đăng ký lái thử
               </button>
             </div>
-
+            {car.versions && car.versions.length > 0 && (
+              <div className="mb-12 lg:hidden">
+                <h2 className="text-3xl font-bold mb-6">Bảng giá các phiên bản</h2>
+                <div className="overflow-x-auto">
+                  <table className="w-full bg-white shadow-lg rounded-lg overflow-hidden">
+                    <thead className="bg-luxury-charcoal text-white">
+                      <tr>
+                        <th className="px-6 py-4 text-left">Phiên bản</th>
+                        <th className="px-6 py-4 text-right">Giá (VNĐ)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {car.versions.map((version: any, index: number) => (
+                        <tr key={version.id} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
+                          <td className="px-6 py-4">{version.name}</td>
+                          <td className="px-6 py-4 text-right font-semibold text-luxury-gold">
+                            {Number(version.price).toLocaleString('vi-VN')}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
             {car.description && (
               <div className="mb-6">
                 <p className="text-gray-700">{car.description}</p>
@@ -175,7 +199,7 @@ export default function CarDetailClient({ car }: CarDetailClientProps) {
 
         {/* Versions Table */}
         {car.versions && car.versions.length > 0 && (
-          <div className="mb-12">
+          <div className="mb-12 hidden lg:block">
             <h2 className="text-3xl font-bold mb-6">Bảng giá các phiên bản</h2>
             <div className="overflow-x-auto">
               <table className="w-full bg-white shadow-lg rounded-lg overflow-hidden">

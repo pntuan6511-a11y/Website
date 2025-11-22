@@ -242,40 +242,40 @@ export default function InstallmentCalculatorPage() {
                 </div>
 
                 <p className="text-center text-gray-500 italic mt-4 border-t pt-4">
-                  * Lưu ý: Kết quả chỉ mang tính chất tham khảo. Vui lòng liên hệ hotline <a href={`tel:${contactAdmin.replace(/\D/g, '')}`} className="font-bold text-luxury-gold hover:underline">{formatPhoneNumber(contactAdmin)}</a> để được tư vấn nhiệt tình và chính xác nhất.
+                  * Lưu ý: Kết quả chỉ mang tính chất tham khảo. Vui lòng liên hệ hotline <a href={`tel:${contactAdmin.replace(/\D/g, '')}`} className="font-bold text-luxury-gold hover:underline">{formatPhoneNumber(contactAdmin)}</a> để được tư vấn.
                 </p>
               </div>
 
-              <div className="card-luxury p-8">
-                <h2 className="text-2xl font-bold mb-4">Lịch trả góp chi tiết</h2>
+              <div className="desktop:card-luxury desktop:p-8">
+                <h2 className="text-2xl font-bold mb-4 px-2 desktop:px-8">Lịch trả góp chi tiết</h2>
                 <div className="overflow-x-auto">
                   <table className="w-full border-collapse">
                     <thead className="bg-luxury-charcoal text-white">
                       <tr>
-                        <th className="px-4 py-3 text-center border border-gray-600">Số tháng</th>
-                        <th className="px-4 py-3 text-left border border-gray-600">Dư nợ đầu kì</th>
-                        <th className="px-4 py-3 text-left border border-gray-600">Trả gốc hàng tháng</th>
-                        <th className="px-4 py-3 text-left border border-gray-600">Trả lãi hàng tháng</th>
-                        <th className="px-4 py-3 text-left border border-gray-600">Gốc + Lãi</th>
+                        <th className="px-1 py-2 desktop:px-4 desktop:py-3 tracking-[-0.5px] text-center border border-gray-600">Số tháng</th>
+                        <th className="px-1 py-2 desktop:px-4 desktop:py-3 tracking-[-0.5px] text-left border border-gray-600">Dư nợ đầu kì</th>
+                        <th className="px-1 py-2 desktop:px-4 desktop:py-3 tracking-[-0.5px] text-left border border-gray-600">Trả gốc hàng tháng</th>
+                        <th className="px-1 py-2 desktop:px-4 desktop:py-3 tracking-[-0.5px] text-left border border-gray-600">Trả lãi hàng tháng</th>
+                        <th className="px-1 py-2 desktop:px-4 desktop:py-3 tracking-[-0.5px] text-left border border-gray-600">Gốc + Lãi</th>
                       </tr>
                     </thead>
                     <tbody>
                       {result.schedule.map((row: any, index: number) => (
                         <tr key={row.month} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                          <td className="px-4 py-2 text-center border border-gray-200">{row.month}</td>
-                          <td className="px-4 py-2 text-left border border-gray-200">{Math.round(row.remainingBalance).toLocaleString('vi-VN')}</td>
-                          <td className="px-4 py-2 text-left border border-gray-200">{Math.round(row.principalPayment).toLocaleString('vi-VN')}</td>
-                          <td className="px-4 py-2 text-left border border-gray-200">{Math.round(row.interestPayment).toLocaleString('vi-VN')}</td>
-                          <td className="px-4 py-2 text-left border border-gray-200 font-semibold">{Math.round(row.total).toLocaleString('vi-VN')}</td>
+                          <td className="px-1 py-2 desktop:px-2 text-center border border-gray-200">{row.month}</td>
+                          <td className="px-1 py-2 desktop:px-2 text-center border border-gray-200">{Math.round(row.remainingBalance).toLocaleString('vi-VN')}</td>
+                          <td className="px-1 py-2 desktop:px-2 text-center border border-gray-200">{Math.round(row.principalPayment).toLocaleString('vi-VN')}</td>
+                          <td className="px-1 py-2 desktop:px-2 text-center border border-gray-200">{Math.round(row.interestPayment).toLocaleString('vi-VN')}</td>
+                          <td className="px-1 py-2 desktop:px-2 text-center border border-gray-200 font-semibold">{Math.round(row.total).toLocaleString('vi-VN')}</td>
                         </tr>
                       ))}
                       {/* Dòng tổng cộng */}
                       <tr className="bg-white font-bold text-red-500">
-                        <td className="px-4 py-2 text-center border border-gray-200"></td>
-                        <td className="px-4 py-2 text-left border border-gray-200"></td>
-                        <td className="px-4 py-2 text-left border border-gray-200">{Math.round(result.loanAmount).toLocaleString('vi-VN')}</td>
-                        <td className="px-4 py-2 text-left border border-gray-200">{Math.round(result.totalInterest).toLocaleString('vi-VN')}</td>
-                        <td className="px-4 py-2 text-left border border-gray-200">{Math.round(result.totalPayment).toLocaleString('vi-VN')}</td>
+                        <td className="px-1 py-2 desktop:px-2 text-center border border-gray-200"></td>
+                        <td className="px-1 py-2 desktop:px-2 text-center border border-gray-200"></td>
+                        <td className="px-1 py-2 desktop:px-2 text-center border border-gray-200">{Math.round(result.loanAmount).toLocaleString('vi-VN')}</td>
+                        <td className="px-1 py-2 desktop:px-2 text-center border border-gray-200">{Math.round(result.totalInterest).toLocaleString('vi-VN')}</td>
+                        <td className="px-1 py-2 desktop:px-2 text-center border border-gray-200">{Math.round(result.totalPayment).toLocaleString('vi-VN')}</td>
                       </tr>
                     </tbody>
                   </table>

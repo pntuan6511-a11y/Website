@@ -98,7 +98,7 @@ export default function Header() {
               </button>
 
               {showDropdown && (
-                <div className="absolute right-0 mt-2 w-56 bg-white border shadow-md rounded z-50">
+                <div className="absolute right-0 mt-2 w-56 bg-white shadow-md rounded z-50">
                   <ul role="menu" className="py-1">
                     {cars.length === 0 ? (
                       <li className="px-4 py-2 text-sm text-luxury-charcoal">Đang tải...</li>

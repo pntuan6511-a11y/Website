@@ -33,14 +33,14 @@ export default function CostEstimatorPage() {
     if (!selectedVersion || !registrationLocation) return
 
     const price = Number(selectedVersion.price)
-    
+
     // Các chi phí ước tính (có thể điều chỉnh)
     const registrationFee = price * 0.02 // 2% giá xe
     const licensePlateFee = 20000000 // 20 triệu (ước tính)
     const insurance = price * 0.015 // 1.5% giá xe
     const roadMaintenanceFee = 1560000 // Phí bảo trì đường bộ năm
     const registrationCertificateFee = 2000000 // Phí đăng kiểm
-    
+
     const totalCost = price + registrationFee + licensePlateFee + insurance + roadMaintenanceFee + registrationCertificateFee
 
     setResult({
@@ -64,7 +64,7 @@ export default function CostEstimatorPage() {
             <div className="space-y-6">
               <div>
                 <label className="block mb-2 font-medium">Chọn mẫu xe</label>
-                <select 
+                <select
                   className="input-custom"
                   onChange={(e) => handleCarChange(e.target.value)}
                   value={selectedCar?.id || ''}
@@ -78,7 +78,7 @@ export default function CostEstimatorPage() {
 
               <div>
                 <label className="block mb-2 font-medium">Chọn phiên bản</label>
-                <select 
+                <select
                   className="input-custom"
                   onChange={(e) => handleVersionChange(e.target.value)}
                   value={selectedVersion?.id || ''}
@@ -95,20 +95,23 @@ export default function CostEstimatorPage() {
 
               <div>
                 <label className="block mb-2 font-medium">Nơi đăng ký</label>
-                <select 
+                <select
                   className="input-custom"
                   onChange={(e) => setRegistrationLocation(e.target.value)}
                   value={registrationLocation}
                 >
                   <option value="">-- Chọn nơi đăng ký --</option>
-                  <option value="hanoi">Hà Nội</option>
-                  <option value="hochiminh">TP. Hồ Chí Minh</option>
-                  <option value="danang">Đà Nẵng</option>
-                  <option value="other">Tỉnh khác</option>
+                  {[
+                    'An Giang', 'Đồng Tháp', 'Cần Thơ', 'Hậu Giang', 'Sóc Trăng',
+                    'Bạc Liêu', 'Cà Mau', 'Vĩnh Long', 'Bến Tre', 'Trà Vinh',
+                    'Tiền Giang', 'Long An', 'Kiên Giang'
+                  ].map((province) => (
+                    <option key={province} value={province}>{province}</option>
+                  ))}
                 </select>
               </div>
 
-              <button 
+              <button
                 onClick={calculateCost}
                 disabled={!selectedVersion || !registrationLocation}
                 className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
@@ -151,7 +154,7 @@ export default function CostEstimatorPage() {
                   <span className="text-2xl font-bold text-luxury-gold">{result.totalCost.toLocaleString('vi-VN')} VNĐ</span>
                 </div>
               </div>
-              
+
               <p className="text-sm text-gray-500 mt-6">
                 * Các chi phí trên chỉ mang tính chất tham khảo và có thể thay đổi tùy theo từng khu vực.
               </p>

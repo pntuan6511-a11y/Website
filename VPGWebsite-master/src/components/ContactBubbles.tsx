@@ -66,7 +66,7 @@ export default function ContactBubbles() {
   }
 
   return (
-    <div className="fixed left-4 bottom-4 z-40 flex flex-col gap-5">
+    <div className="fixed right-4 left-auto lg:left-4 lg:right-auto bottom-4 z-40 flex flex-col gap-5">
       {items.map((it, idx) => {
         if (!it.value) return null
         const delay = `${idx * 160}ms`
@@ -104,13 +104,13 @@ export default function ContactBubbles() {
         }
 
         return (
-          <div key={it.key} className="relative flex items-center" style={{ zIndex: 10 }}>
+          <div key={it.key} className="relative flex items-center flex-row-reverse lg:flex-row" style={{ zIndex: 10 }}>
             <a href={it.href} {...props}>
               <span style={ringStyle} />
               <span style={{ display: 'inline-block', animation: `shake 1.2s ${delay} infinite ease-in-out` }}>{it.icon}</span>
             </a>
             {it.key === 'contact' ? (
-              <span style={{ backgroundColor: "red" }} className="-ml-3  px-3 py-2 pl-6 rounded-r-full text-sm bg-white/95 text-white shadow-sm max-w-xs truncate card-luxury">
+              <span style={{ backgroundColor: "red" }} className="-mr-3 lg:mr-0 lg:-ml-3 px-3 py-2 pr-6 pl-3 lg:pl-6 lg:pr-3 rounded-l-full lg:rounded-l-none lg:rounded-r-full text-sm bg-white/95 text-white shadow-sm max-w-xs truncate card-luxury">
                 {it.value}
               </span>
             ) : null}
