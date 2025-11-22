@@ -1,0 +1,16 @@
+{
+  "name": "VinFast VFG An Giang",
+  "short_name": "VFG An Giang",
+  "description": "Đại lý ủy quyền chính thức của VinFast tại An Giang",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#C5A572",
+  "icons": [
+    {
+      "src": "/default/fa-icon.png",
+      "sizes": "any",
+      "type": "image/png"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.product
+    volumes:
+      - ./public/uploads:/app/public/uploads
+      - ./uploads:/uploads
+    restart: unless-stopped
+    depends_on:
+      - db_host
+
+  db_host:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=vpg_user
+      - POSTGRES_PASSWORD=vpg_password
+      - POSTGRES_DB=vpg_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

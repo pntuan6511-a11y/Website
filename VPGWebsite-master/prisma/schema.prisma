@@ -1,0 +1,125 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("admins")
+}
+
+model Car {
+  id          String        @id @default(cuid())
+  name        String
+  slug        String        @unique
+  description String?       @db.Text
+  article     String?       @db.Text
+  mainImage   String?
+  tag         Int?
+  
+  // SEO Fields
+  metaTitle       String?
+  metaDescription String?       @db.Text
+  metaKeywords    String?       @db.Text
+  ogImage         String?
+  
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  
+  versions    CarVersion[]
+  images      CarImage[]
+  testDrives  TestDrive[]
+  priceQuotes PriceQuote[]
+
+  @@map("cars")
+}
+
+model CarVersion {
+  id        String   @id @default(cuid())
+  carId     String
+  name      String
+  price     Decimal  @db.Decimal(15, 2)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  car       Car      @relation(fields: [carId], references: [id], onDelete: Cascade)
+
+  @@map("car_versions")
+}
+
+model CarImage {
+  id        String   @id @default(cuid())
+  carId     String?
+  imageUrl  String
+  imageType String   // "banner", "main", "gallery" — allow multiple banner images for site banner management
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  
+  car       Car?     @relation(fields: [carId], references: [id], onDelete: Cascade)
+
+  @@map("car_images")
+}
+
+model TestDrive {
+  id          String   @id @default(cuid())
+  fullName    String
+  phone       String
+  carId       String
+  carName     String
+  testDate    DateTime
+  status      Int?
+  createdAt   DateTime @default(now())
+  
+  car         Car      @relation(fields: [carId], references: [id], onDelete: Cascade)
+
+  @@map("test_drives")
+}
+
+model PriceQuote {
+  id          String   @id @default(cuid())
+  fullName    String
+  phone       String
+  carId       String
+  carName     String
+  paymentType String   // "full" or "installment"
+  status      Int?
+  createdAt   DateTime @default(now())
+  
+  car         Car      @relation(fields: [carId], references: [id], onDelete: Cascade)
+
+  @@map("price_quotes")
+}
+
+model Customer {
+  id        String   @id @default(cuid())
+  name      String
+  imageUrl  String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("customers")
+}
+
+model Setting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("settings")
+}

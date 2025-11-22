@@ -1,0 +1,62 @@
+{
+  "name": "vpg-website",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "build:pro": "set DOTENV_CONFIG_PATH=.env.production && prisma generate && next build",
+    "start": "next start",
+    "lint": "next lint",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:studio": "prisma studio"
+  },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+  },
+  "dependencies": {
+    "@fullcalendar/core": "^6.1.19",
+    "@fullcalendar/daygrid": "^6.1.19",
+    "@fullcalendar/interaction": "^6.1.19",
+    "@fullcalendar/list": "^6.1.19",
+    "@fullcalendar/react": "^6.1.19",
+    "@fullcalendar/timegrid": "^6.1.19",
+    "@prisma/client": "^5.22.0",
+    "@react-jvectormap/core": "^1.0.4",
+    "@react-jvectormap/world": "^1.1.2",
+    "@tanstack/react-table": "^8.21.3",
+    "@types/nodemailer": "^7.0.3",
+    "apexcharts": "^5.3.6",
+    "bcryptjs": "^2.4.3",
+    "clsx": "^2.0.0",
+    "date-fns": "^3.0.6",
+    "flatpickr": "^4.6.13",
+    "next": "14.0.4",
+    "next-auth": "^4.24.5",
+    "nodemailer": "^7.0.10",
+    "react": "^18.2.0",
+    "react-apexcharts": "^1.8.0",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
+    "react-dom": "^18.2.0",
+    "react-dropzone": "^14.3.8",
+    "react-hook-form": "^7.49.2",
+    "react-quill": "^2.0.0",
+    "swiper": "^11.0.5"
+  },
+  "devDependencies": {
+    "@svgr/webpack": "^8.1.0",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/flatpickr": "^3.1.4",
+    "@types/node": "^20.10.5",
+    "@types/react": "^18.2.45",
+    "@types/react-dom": "^18.2.18",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.32",
+    "prisma": "^5.7.0",
+    "tailwindcss": "^3.4.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
