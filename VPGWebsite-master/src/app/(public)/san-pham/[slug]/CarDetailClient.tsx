@@ -159,7 +159,7 @@ export default function CarDetailClient({ car }: CarDetailClientProps) {
                             src={img.imageUrl}
                             alt={`${car.name} ${index + 1}`}
                             fill
-                            className="object-cover"
+                            className="object-contain"
                           />
                         </a>
                       </SwiperSlide>
@@ -200,7 +200,7 @@ export default function CarDetailClient({ car }: CarDetailClientProps) {
                             src={img.imageUrl}
                             alt={`${car.name} thumb ${index + 1}`}
                             fill
-                            className="object-cover"
+                            className="object-contain"
                           />
                         </div>
                       </SwiperSlide>

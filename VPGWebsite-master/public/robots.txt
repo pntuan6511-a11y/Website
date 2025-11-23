@@ -8,4 +8,4 @@ Disallow: /admin/
 Disallow: /api/
 
 # Sitemap
-Sitemap: https://vfgangiang.com/sitemap.xml
+Sitemap: https://vinfast3s-angiang.com/sitemap.xml

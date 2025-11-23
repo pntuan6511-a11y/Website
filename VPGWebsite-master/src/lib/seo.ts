@@ -14,7 +14,7 @@ const DEFAULT_SITE_NAME = 'VinFast VFG An Giang'
 const DEFAULT_DESCRIPTION = 'Đại lý ủy quyền chính thức của VinFast tại An Giang. Cung cấp đầy đủ các dòng xe VinFast với giá tốt nhất, dịch vụ tư vấn chuyên nghiệp.'
 const DEFAULT_KEYWORDS = 'VinFast, xe điện, ô tô điện, VF8, VF9, VF5, VFe34, đại lý VinFast, mua xe VinFast, giá xe VinFast'
 const DEFAULT_IMAGE = '/images/default-og.jpg'
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://vfgangiang.com'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://vinfast3s-angiang.com'
 
 export function generateSEO(config: SEOConfig): Metadata {
   const {
