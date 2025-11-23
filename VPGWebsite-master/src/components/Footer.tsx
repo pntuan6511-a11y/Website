@@ -52,7 +52,7 @@ export default function Footer() {
             <ul className="space-y-2 text-md text-gray-400">
               {cars.slice(0, 5).map((car) => (
                 <li key={car.id}>
-                  <Link href={`/cars/${car.slug}`} className="hover:text-luxury-gold transition-colors">
+                  <Link href={`/san-pham/${car.slug}`} className="hover:text-luxury-gold transition-colors">
                     {car.name}
                   </Link>
                 </li>
