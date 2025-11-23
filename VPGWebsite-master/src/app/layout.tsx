@@ -34,6 +34,21 @@ export default function RootLayout({
   return (
     <html lang="vi">
       <head>
+        {/* Preconnect to external domains for faster resource loading */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+
+        {/* DNS Prefetch for potential external resources */}
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+
+        {/* Preload critical images */}
+        <link
+          rel="preload"
+          as="image"
+          href="/default/vinfastlogo.webp"
+          type="image/webp"
+        />
+
         {/* Icons and manifest */}
         <link rel="icon" href="/default/fa-icon.png" type="image/png" />
         <link rel="apple-touch-icon" href="/default/fa-icon.png" />

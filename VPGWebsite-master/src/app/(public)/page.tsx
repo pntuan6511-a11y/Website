@@ -301,7 +301,7 @@ export default function HomePage() {
             {/* Right Image */}
             <div className="relative rounded-lg overflow-hidden shadow-2xl aspect-[16/9]">
               <Image
-                src="/default/dai-ly.jpg"
+                src="/default/dai-ly.webp"
                 alt="VinFast An Giang"
                 fill
                 className="object-cover"
@@ -316,7 +316,7 @@ export default function HomePage() {
           <div className="container-custom">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Khách hàng của chúng tôi</h2>
             <div className="relative overflow-hidden">
-              <div 
+              <div
                 className="flex transition-transform duration-500 ease-in-out"
                 style={{
                   transform: `translateX(-${currentCustomerSlide * (100 / Math.max(visibleCount, 1))}%)`

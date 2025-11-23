@@ -51,7 +51,7 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3">
             <img
-              src="/default/vinfastlogo.jpg"
+              src="/default/vinfastlogo.webp"
               alt="VinFast Logo"
               className="h-12 w-auto"
             />
@@ -153,7 +153,7 @@ export default function Header() {
             <aside className={`relative ml-auto h-full w-2/3 max-w-[420px] bg-white shadow-lg transform transition-transform duration-300 ease-in-out ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
               <div className="flex items-center justify-between p-4 border-b">
                 <img
-                  src="/default/vinfastlogo.jpg"
+                  src="/default/vinfastlogo.webp"
                   alt="VinFast Logo"
                   className="h-6 w-auto"
                 />

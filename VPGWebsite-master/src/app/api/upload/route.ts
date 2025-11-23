@@ -1,14 +1,18 @@
 import { NextResponse } from 'next/server'
-import { writeFile, mkdir } from 'fs/promises'
-import { join, isAbsolute } from 'path'
+import { writeFile, mkdir, unlink } from 'fs/promises'
+import { join, isAbsolute, extname } from 'path'
 import { existsSync } from 'fs'
 import { prisma } from '@/lib/prisma'
+import sharp from 'sharp'
+
+// Image extensions that should be converted to WebP
+const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff']
 
 export async function POST(request: Request) {
   try {
     const formData = await request.formData()
     const file = formData.get('file') as File
-    
+
     if (!file) {
       return NextResponse.json({ error: 'No file uploaded' }, { status: 400 })
     }
@@ -28,10 +32,47 @@ export async function POST(request: Request) {
 
     // Generate unique filename
     const timestamp = Date.now()
-    const filename = `${timestamp}-${file.name.replace(/\s/g, '-')}`
-    const filepath = join(uploadsDir, filename)
+    const originalName = file.name.replace(/\s/g, '-')
+    const ext = extname(originalName).toLowerCase()
+    const nameWithoutExt = originalName.replace(ext, '')
 
-    await writeFile(filepath, buffer)
+    // Check if image should be converted to WebP
+    const shouldConvertToWebP = IMAGE_EXTENSIONS.includes(ext)
+
+    let filename: string
+    let filepath: string
+    let finalBuffer: Buffer = buffer
+
+    if (shouldConvertToWebP) {
+      // Convert to WebP
+      filename = `${timestamp}-${nameWithoutExt}.webp`
+      filepath = join(uploadsDir, filename)
+
+      try {
+        // Convert image to WebP with optimization
+        finalBuffer = await sharp(buffer)
+          .webp({
+            quality: 85, // Good balance between quality and size
+            effort: 4 // Compression effort (0-6, higher = smaller but slower)
+          })
+          .toBuffer()
+
+        console.log(`✅ Converted ${originalName} to WebP (${buffer.length} → ${finalBuffer.length} bytes, ${Math.round((1 - finalBuffer.length / buffer.length) * 100)}% smaller)`)
+      } catch (conversionError) {
+        console.error('WebP conversion failed, saving original:', conversionError)
+        // Fallback to original if conversion fails
+        filename = `${timestamp}-${originalName}`
+        filepath = join(uploadsDir, filename)
+        finalBuffer = buffer
+      }
+    } else {
+      // Keep original format for non-image files
+      filename = `${timestamp}-${originalName}`
+      filepath = join(uploadsDir, filename)
+    }
+
+    // Write file to disk
+    await writeFile(filepath, finalBuffer)
 
     // Compute public-facing URL. If configured path is inside public folder,
     // return path relative to public (starts with '/'). If uploadsDir is an
@@ -76,7 +117,11 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       url: publicUrl,
-      filename
+      filename,
+      originalSize: buffer.length,
+      finalSize: finalBuffer.length,
+      savings: buffer.length > finalBuffer.length ? Math.round((1 - finalBuffer.length / buffer.length) * 100) : 0,
+      converted: shouldConvertToWebP
     })
   } catch (error) {
     console.error('Upload error:', error)
