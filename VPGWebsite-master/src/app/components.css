@@ -1,0 +1,134 @@
+/* Non-Critical Component Styles - Deferred Loading */
+
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .input-custom {
+        @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-luxury-gold focus:border-transparent;
+    }
+
+    .card-luxury {
+        @apply bg-white rounded-sm shadow-lg hover:shadow-xl transition-shadow duration-300;
+    }
+
+    /* Menu Components */
+    .menu-item {
+        @apply relative flex items-center w-full gap-3 px-3 py-2 font-medium rounded-lg text-theme-sm;
+    }
+
+    .menu-item-active {
+        @apply bg-brand-50 text-brand-500 dark:bg-brand-500/[0.12] dark:text-brand-400;
+    }
+
+    .menu-item-inactive {
+        @apply text-gray-700 hover:bg-gray-100 group-hover:text-gray-700 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-gray-300;
+    }
+
+    .menu-item-icon {
+        @apply text-gray-500 group-hover:text-gray-700 dark:text-gray-400;
+    }
+
+    .menu-item-icon-active {
+        @apply text-brand-500 dark:text-brand-400;
+    }
+
+    .menu-item-icon-inactive {
+        @apply text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-300;
+    }
+
+    .menu-item-arrow {
+        @apply relative;
+    }
+
+    .menu-item-arrow-active {
+        @apply rotate-180 text-brand-500 dark:text-brand-400;
+    }
+
+    .menu-item-arrow-inactive {
+        @apply text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-300;
+    }
+
+    .menu-dropdown-item {
+        @apply relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-theme-sm font-medium;
+    }
+
+    .menu-dropdown-item-active {
+        @apply bg-brand-50 text-brand-500 dark:bg-brand-500/[0.12] dark:text-brand-400;
+    }
+
+    .menu-dropdown-item-inactive {
+        @apply text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/5;
+    }
+
+    .menu-dropdown-badge {
+        @apply block rounded-full px-2.5 py-0.5 text-xs font-medium uppercase text-brand-500 dark:text-brand-400;
+    }
+
+    .menu-dropdown-badge-active {
+        @apply bg-brand-100 dark:bg-brand-500/20;
+    }
+
+    .menu-dropdown-badge-inactive {
+        @apply bg-brand-50 group-hover:bg-brand-100 dark:bg-brand-500/15 dark:group-hover:bg-brand-500/20;
+    }
+}
+
+@layer utilities {
+    .custom-scrollbar::-webkit-scrollbar {
+        @apply w-1.5 h-1.5;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+        @apply rounded-full;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        @apply bg-gray-200 rounded-full dark:bg-gray-700;
+    }
+
+    /* For Remove Date Icon */
+    input[type="date"]::-webkit-inner-spin-button,
+    input[type="time"]::-webkit-inner-spin-button,
+    input[type="date"]::-webkit-calendar-picker-indicator,
+    input[type="time"]::-webkit-calendar-picker-indicator {
+        display: none;
+        -webkit-appearance: none;
+    }
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #344054;
+}
+
+.input-date-icon::-webkit-inner-spin-button,
+.input-date-icon::-webkit-calendar-picker-indicator {
+    opacity: 0;
+    -webkit-appearance: none;
+}
+
+/* Form Check Styles */
+.form-check-input:checked~span {
+    @apply border-[6px] border-brand-500 bg-brand-500 dark:border-brand-500;
+}
+
+.taskCheckbox:checked~.box span {
+    @apply opacity-100 bg-brand-500;
+}
+
+.taskCheckbox:checked~p {
+    @apply text-gray-400 line-through;
+}
+
+.taskCheckbox:checked~.box {
+    @apply border-brand-500 bg-brand-500 dark:border-brand-500;
+}
+
+.task {
+    transition: all 0.2s ease;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px 0 rgba(16, 24, 40, 0.1),
+        0 1px 2px 0 rgba(16, 24, 40, 0.06);
+    opacity: 0.8;
+    cursor: grabbing;
+}

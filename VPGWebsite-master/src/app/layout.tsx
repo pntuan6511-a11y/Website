@@ -1,13 +1,19 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import './critical.css'
+import './components.css'
 // Quill editor styles (global). Ensure `react-quill` is installed in the project.
 import 'react-quill/dist/quill.snow.css'
 import { generateSEO, generateOrganizationStructuredData } from '@/lib/seo'
 import AuthProvider from '@/components/AuthProvider'
 import { SettingsProvider } from '@/context/SettingsContext'
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap' // Optimize font loading
+})
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
@@ -28,9 +34,12 @@ export default function RootLayout({
   return (
     <html lang="vi">
       <head>
+        {/* Icons and manifest */}
         <link rel="icon" href="/default/fa-icon.png" type="image/png" />
         <link rel="apple-touch-icon" href="/default/fa-icon.png" />
         <link rel="manifest" href="/manifest.json" />
+
+        {/* Structured Data */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}

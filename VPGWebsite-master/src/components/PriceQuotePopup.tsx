@@ -29,14 +29,14 @@ export default function PriceQuotePopup() {
       const ts = parseInt(saved, 10)
       if (!isNaN(ts)) {
         const diff = Date.now() - ts
-        if (diff < 3 * 60 * 1000) { // less than 3 minutes
+        if (diff < 1 * 60 * 1000) { // less than 3 minutes
           setDismissed(true)
           return
         }
       }
     }
 
-    const t = setTimeout(() => setShow(true), 3000)
+    const t = setTimeout(() => setShow(true), 15000)
     return () => clearTimeout(t)
   }, [])
 
