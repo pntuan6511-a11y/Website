@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useMemo } from 'react'
 import Toast from '@/components/Toast'
+import ConfirmModal from '@/components/ConfirmModal'
 import {
   useReactTable,
   getCoreRowModel,
@@ -33,25 +34,78 @@ export default function AdminCustomersPage() {
   }, [])
 
   const loadCustomers = () => {
-    fetch('/api/customers')
+    console.log('Loading customers...')
+    fetch('/api/customers', {
+      cache: 'no-store',
+      headers: {
+        'Cache-Control': 'no-cache'
+      }
+    })
       .then(res => res.json())
-      .then(data => setCustomers(data))
-      .catch(err => console.error(err))
+      .then(data => {
+        console.log('Loaded customers:', data.length)
+        setCustomers(data)
+      })
+      .catch(err => console.error('Load error:', err))
   }
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Bạn có chắc muốn xóa?')) return
+  const [confirmModal, setConfirmModal] = useState<{ open: boolean; customerId: string | null }>({
+    open: false,
+    customerId: null
+  })
+
+  const handleDeleteClick = (id: string) => {
+    setConfirmModal({ open: true, customerId: id })
+  }
+
+  const handleDeleteConfirm = async () => {
+    const id = confirmModal.customerId
+
+    if (!id) return
+
+    console.log('Deleting customer:', id)
 
     try {
       const res = await fetch(`/api/customers/${id}`, {
         method: 'DELETE'
       })
 
+      console.log('Delete response status:', res.status, 'OK:', res.ok)
+
       if (res.ok) {
-        loadCustomers()
+        // Close modal
+        setConfirmModal({ open: false, customerId: null })
+
+        // Immediately update UI by removing the deleted customer
+        console.log('Filtering out customer:', id)
+        setCustomers(prev => {
+          const filtered = prev.filter(c => c.id !== id)
+          console.log('Before filter:', prev.length, 'After filter:', filtered.length)
+          return filtered
+        })
+
+        // Show success toast
+        setTimeout(() => {
+          setToast({ visible: true, message: 'Xóa khách hàng thành công!', variant: 'success' })
+        }, 100)
+
+        // Reload in background to ensure consistency
+        setTimeout(() => {
+          console.log('Background reload...')
+          loadCustomers()
+        }, 500)
+      } else {
+        setConfirmModal({ open: false, customerId: null })
+        setTimeout(() => {
+          setToast({ visible: true, message: 'Không thể xóa khách hàng', variant: 'error' })
+        }, 100)
       }
     } catch (error) {
-      setToast({ visible: true, message: 'Có lỗi xảy ra', variant: 'error' })
+      console.error('Delete error:', error)
+      setConfirmModal({ open: false, customerId: null })
+      setTimeout(() => {
+        setToast({ visible: true, message: 'Có lỗi xảy ra', variant: 'error' })
+      }, 100)
     }
   }
 
@@ -74,7 +128,7 @@ export default function AdminCustomersPage() {
         cell: (info) => {
           const imageUrl = info.getValue() as string
           return imageUrl ? (
-            <img src={imageUrl} alt="Customer" className="w-12 h-12 rounded-full object-cover" />
+            <img src={imageUrl} alt="Customer" className="w-20 aspect-[16/9] rounded-lg object-cover" />
           ) : null
         },
         enableSorting: false,
@@ -90,18 +144,12 @@ export default function AdminCustomersPage() {
         id: 'actions',
         header: 'Thao tác',
         cell: ({ row }) => (
-          <div className="flex justify-end gap-3">
-            <a 
-              href={`/admin/customers/${row.original.id}`}
-              className="text-luxury-gold hover:text-luxury-darkGold font-medium"
-            >
-              Sửa
+          <div className="flex justify-end gap-3 items-center">
+            <a href={`/admin/customers/${row.original.id}`} className="text-luxury-gold hover:text-luxury-darkGold">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z" /></svg>
             </a>
-            <button
-              onClick={() => handleDelete(row.original.id)}
-              className="text-red-600 hover:text-red-900 font-medium"
-            >
-              Xóa
+            <button onClick={() => handleDeleteClick(row.original.id)} className="text-red-600 hover:text-red-900">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" /></svg>
             </button>
           </div>
         ),
@@ -135,6 +183,15 @@ export default function AdminCustomersPage() {
   return (
     <div>
       <Toast message={toast.message} visible={toast.visible} variant={toast.variant} onClose={() => setToast({ ...toast, visible: false })} />
+      <ConfirmModal
+        open={confirmModal.open}
+        title="Xác nhận xóa khách hàng"
+        description="Bạn có chắc muốn xóa khách hàng này? Thao tác này không thể hoàn tác."
+        confirmLabel="Xóa"
+        cancelLabel="Hủy"
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setConfirmModal({ open: false, customerId: null })}
+      />
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <h1 className="text-3xl font-bold">Quản lý khách hàng</h1>
         <a href="/admin/customers/create" className="btn-primary">

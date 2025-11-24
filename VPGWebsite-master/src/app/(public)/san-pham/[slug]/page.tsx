@@ -21,11 +21,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return generateSEO({ title: 'Không tìm thấy xe' })
   }
 
-  const mainImage = car.images?.find(img => img.imageType === 'main')?.imageUrl 
-    || car.ogImage 
+  const mainImage = car.images?.find(img => img.imageType === 'main')?.imageUrl
+    || car.ogImage
     || car.mainImage
 
-  const lowestPrice = car.versions.length > 0 
+  const lowestPrice = car.versions.length > 0
     ? Number(car.versions[0].price).toLocaleString('vi-VN')
     : ''
 
@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description: car.metaDescription || car.description || `${car.name} - Giá từ ${lowestPrice} VNĐ. Đại lý chính thức VinFast. Tư vấn miễn phí, lái thử tận nhà.`,
     keywords: car.metaKeywords || `${car.name}, xe VinFast, giá ${car.name}, mua ${car.name}, lái thử ${car.name}`,
     image: mainImage ?? undefined,
-    url: `/cars/${car.slug}`,
+    url: `/san-pham/${car.slug}`,
     type: 'product',
   })
 }
@@ -64,8 +64,8 @@ export default async function CarDetailPage({ params }: PageProps) {
   const carSchema = generateCarStructuredData(carData)
   const breadcrumbSchema = generateBreadcrumbStructuredData([
     { name: 'Trang chủ', url: '/' },
-    { name: 'Dòng xe', url: '/cars' },
-    { name: car.name, url: `/cars/${car.slug}` },
+    { name: 'Dòng xe', url: '/san-pham' },
+    { name: car.name, url: `/san-pham/${car.slug}` },
   ])
 
   return (

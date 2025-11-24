@@ -1,4 +1,4 @@
- 'use client'
+'use client'
 
 import dynamic from 'next/dynamic'
 import { useState, useEffect } from 'react'
@@ -7,6 +7,8 @@ import { useState, useEffect } from 'react'
 const ReactQuill: any = dynamic(() => import('react-quill'), { ssr: false })
 import { useRouter } from 'next/navigation'
 import Toast from '@/components/Toast'
+import CurrencyInput from '@/components/ui/CurrencyInput'
+
 
 interface PendingImage {
   file: File
@@ -92,7 +94,7 @@ export default function CreateCarPage() {
 
         if (uploadRes.ok) {
           const uploadData = await uploadRes.json()
-          
+
           await fetch('/api/car-images', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -185,7 +187,7 @@ export default function CreateCarPage() {
               <label className="block mb-2 font-medium">Slug *</label>
               <div className="gap-0 flex items-center h-12 border border-gray-300 rounded-lg px-2 py-2">
                 <span className="text-luxury-gold">{process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/</span>
-                  <input
+                <input
                   type="text"
                   name="slug"
                   required
@@ -199,7 +201,7 @@ export default function CreateCarPage() {
                   placeholder="vinfast-vf-8"
                 />
               </div>
-              
+
             </div>
             <div>
               <label className="block mb-2 font-medium">Tag</label>
@@ -224,11 +226,11 @@ export default function CreateCarPage() {
 
           <div className="mb-6">
             <label className="block mb-2 font-medium">Bài viết (HTML)</label>
-            <div className="border rounded">
+            <div className="quill-custom">
               {isMounted ? (
                 <ReactQuill value={article} onChange={setArticle} />
               ) : (
-                <textarea readOnly value={article} className="input-custom font-mono text-sm" />
+                <textarea readOnly value={article} className="input-custom font-mono text-sm min-h-[400px]" />
               )}
             </div>
             {/* Hidden input so FormData picks up the article content on submit */}
@@ -238,7 +240,7 @@ export default function CreateCarPage() {
           {/* SEO Section */}
           <div className="mb-6 pt-6 border-t">
             <h2 className="text-xl font-bold mb-6">SEO & Social Media</h2>
-            
+
             <div className="mb-6">
               <label className="block mb-2 font-medium">Meta Title</label>
               <input
@@ -289,7 +291,7 @@ export default function CreateCarPage() {
           {/* Images Section */}
           <div className="mb-6 pt-6 border-t">
             <h2 className="text-xl font-bold mb-6">Quản lý hình ảnh</h2>
-            
+
             {/* <div className="mb-8">
               <h3 className="text-lg font-semibold mb-4">Ảnh Banner</h3>
               <p className="text-sm text-gray-500">Quản lý ảnh banner cho website nằm trong mục Quản lý hình ảnh gallery. (Cho phép upload nhiều ảnh với imageType = "banner")</p>
@@ -382,7 +384,7 @@ export default function CreateCarPage() {
                 + Thêm phiên bản
               </button>
             </div>
-            
+
             <div className="space-y-4">
               {versions.map((version, index) => (
                 <div key={index} className="flex gap-4 items-start p-4 bg-gray-50 rounded">
@@ -399,12 +401,11 @@ export default function CreateCarPage() {
                     </div>
                     <div>
                       <label className="block mb-2 text-sm font-medium">Giá (VNĐ)</label>
-                      <input
-                        type="number"
+                      <CurrencyInput
                         value={version.price}
-                        onChange={(e) => updateVersion(index, 'price', e.target.value)}
+                        onChange={(val) => updateVersion(index, 'price', val)}
                         className="input-custom"
-                        placeholder="1200000000"
+                        placeholder="1,200,000,000"
                       />
                     </div>
                   </div>

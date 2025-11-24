@@ -240,6 +240,28 @@ rm -rf node_modules package-lock.json
 npm install
 ```
 
+**Lỗi: Sharp missing linux-x64 runtime**
+```bash
+# Lỗi: Could not load the "sharp" module using the linux-x64 runtime
+# Fix: Cài đặt riêng cho platform linux
+npm install --os=linux --cpu=x64 sharp
+```
+
+**Lỗi: Unsupported CPU (requires v2 microarchitecture)**
+```bash
+# Lỗi: Prebuilt binaries for linux-x64 require v2 microarchitecture
+# Nguyên nhân: CPU của VPS đời cũ (thiếu AVX support)
+# Fix: Build từ source (sẽ tốn vài phút)
+# 1. Gỡ bản cũ
+npm uninstall sharp
+# 2. Cài dependency & build tools
+# (Ubuntu/Debian)
+apt-get update && apt-get install -y build-essential libvips-dev pkg-config
+npm install node-addon-api node-gyp
+# 3. Cài lại với flag build
+npm install --build-from-source sharp
+```
+
 ### App không start
 
 **Check logs:**

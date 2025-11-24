@@ -115,7 +115,7 @@ export default function AdminSettingsPage() {
                 </div>
 
                 <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Zalo quản trị (ZALO_ADMIN)</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Tiktok quản trị (Tiktok_ADMIN)</label>
                     <input type="text" value={zaloAdmin} onChange={(e) => setZaloAdmin(e.target.value)} className="input-custom w-full" />
                 </div>
 

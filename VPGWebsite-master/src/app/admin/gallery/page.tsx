@@ -137,12 +137,12 @@ export default function AdminGalleryPage() {
       </div>
 
       <div className="bg-white shadow rounded-lg py-3 px-6 mb-6">
-        
+
         <div className="mb-6">
           <div className="grid grid-cols-1">
             <h3 className="font-semibold mb-2">Banner website</h3>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 border py-2 px-3 rounded-sm">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-2 px-3 rounded-sm">
               {banners.map(b => (
                 <div key={b.id} className="relative group">
                   <img src={b.imageUrl} className="w-full h-40 object-cover rounded" />
@@ -150,7 +150,7 @@ export default function AdminGalleryPage() {
                 </div>
               ))}
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 border py-2 px-3 rounded-sm">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-2 px-3 rounded-sm">
               {pending.map((p, idx) => (
                 <div key={idx} className="relative group">
                   <img src={p.preview} className="w-full h-24 object-cover rounded" />

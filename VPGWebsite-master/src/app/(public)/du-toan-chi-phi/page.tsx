@@ -34,22 +34,26 @@ export default function CostEstimatorPage() {
 
     const price = Number(selectedVersion.price)
 
-    // Các chi phí ước tính (có thể điều chỉnh)
-    const registrationFee = price * 0.02 // 2% giá xe
-    const licensePlateFee = 20000000 // 20 triệu (ước tính)
-    const insurance = price * 0.015 // 1.5% giá xe
-    const roadMaintenanceFee = 1560000 // Phí bảo trì đường bộ năm
-    const registrationCertificateFee = 2000000 // Phí đăng kiểm
+    // Các chi phí ước tính theo công thức mới
+    const registrationFee = price * 0.10 // 10% giá xe
+    const licensePlateFee = 1000000 // 1 triệu
+    const civilInsurance = 550000 // Bảo hiểm dân sự
+    const bodyInsurance = price * 0.017 // 1.7% giá xe
+    const roadMaintenanceFee = 1560000 // Phí bảo trì đường bộ
+    const registrationCertificateFee = 100000 // Phí cấp sổ đăng kiểm
+    const serviceFee = 3000000 // Phí dịch vụ đăng kí
 
-    const totalCost = price + registrationFee + licensePlateFee + insurance + roadMaintenanceFee + registrationCertificateFee
+    const totalCost = price + registrationFee + licensePlateFee + civilInsurance + bodyInsurance + roadMaintenanceFee + registrationCertificateFee + serviceFee
 
     setResult({
       carPrice: price,
       registrationFee,
       licensePlateFee,
-      insurance,
+      civilInsurance,
+      bodyInsurance,
       roadMaintenanceFee,
       registrationCertificateFee,
+      serviceFee,
       totalCost
     })
   }
@@ -130,7 +134,7 @@ export default function CostEstimatorPage() {
                   <span className="font-semibold">{result.carPrice.toLocaleString('vi-VN')} VNĐ</span>
                 </div>
                 <div className="flex justify-between items-center pb-3 border-b">
-                  <span className="text-gray-600">Phí trước bạ (2%)</span>
+                  <span className="text-gray-600">Thuế trước bạ (10%)</span>
                   <span className="font-semibold">{result.registrationFee.toLocaleString('vi-VN')} VNĐ</span>
                 </div>
                 <div className="flex justify-between items-center pb-3 border-b">
@@ -138,16 +142,24 @@ export default function CostEstimatorPage() {
                   <span className="font-semibold">{result.licensePlateFee.toLocaleString('vi-VN')} VNĐ</span>
                 </div>
                 <div className="flex justify-between items-center pb-3 border-b">
-                  <span className="text-gray-600">Bảo hiểm (1.5%)</span>
-                  <span className="font-semibold">{result.insurance.toLocaleString('vi-VN')} VNĐ</span>
+                  <span className="text-gray-600">Bảo hiểm dân sự</span>
+                  <span className="font-semibold">{result.civilInsurance.toLocaleString('vi-VN')} VNĐ</span>
                 </div>
                 <div className="flex justify-between items-center pb-3 border-b">
-                  <span className="text-gray-600">Phí bảo trì đường bộ</span>
+                  <span className="text-gray-600">Bảo hiểm thân xe (1.7%)</span>
+                  <span className="font-semibold">{result.bodyInsurance.toLocaleString('vi-VN')} VNĐ</span>
+                </div>
+                <div className="flex justify-between items-center pb-3 border-b">
+                  <span className="text-gray-600">Phí đường bộ</span>
                   <span className="font-semibold">{result.roadMaintenanceFee.toLocaleString('vi-VN')} VNĐ</span>
                 </div>
                 <div className="flex justify-between items-center pb-3 border-b">
-                  <span className="text-gray-600">Phí đăng kiểm</span>
+                  <span className="text-gray-600">Phí cấp sổ đăng kiểm</span>
                   <span className="font-semibold">{result.registrationCertificateFee.toLocaleString('vi-VN')} VNĐ</span>
+                </div>
+                <div className="flex justify-between items-center pb-3 border-b">
+                  <span className="text-gray-600">Phí dịch vụ đăng kí</span>
+                  <span className="font-semibold">{result.serviceFee.toLocaleString('vi-VN')} VNĐ</span>
                 </div>
                 <div className="flex justify-between items-center pt-3 border-t-2 border-luxury-gold">
                   <span className="text-xl font-bold">Tổng chi phí</span>

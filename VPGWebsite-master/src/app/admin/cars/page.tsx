@@ -1,8 +1,9 @@
- 'use client'
+'use client'
 
 import React, { useEffect, useState, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import Toast from '@/components/Toast'
+import ConfirmModal from '@/components/ConfirmModal'
 import {
   useReactTable,
   getCoreRowModel,
@@ -55,6 +56,10 @@ export default function AdminCarsPage() {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [globalFilter, setGlobalFilter] = useState('')
   const [tagFilter, setTagFilter] = useState<string>('')
+  const [confirmModal, setConfirmModal] = useState<{ open: boolean; carId: string | null }>({
+    open: false,
+    carId: null
+  })
 
   useEffect(() => {
     loadCars()
@@ -67,8 +72,15 @@ export default function AdminCarsPage() {
       .catch(err => console.error(err))
   }
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Bạn có chắc muốn xóa xe này?')) return
+  const handleDeleteClick = (id: string) => {
+    console.log('Opening confirm modal for car:', id)
+    setConfirmModal({ open: true, carId: id })
+  }
+
+  const handleDeleteConfirm = async () => {
+    const id = confirmModal.carId
+
+    if (!id) return
 
     try {
       const res = await fetch(`/api/cars/${id}`, {
@@ -76,10 +88,28 @@ export default function AdminCarsPage() {
       })
 
       if (res.ok) {
-        loadCars()
+        // Close modal first
+        setConfirmModal({ open: false, carId: null })
+        // Show toast after a brief delay to ensure modal is closed
+        setTimeout(() => {
+          console.log('Setting toast to visible')
+          setToast({ visible: true, message: 'Xóa xe thành công!', variant: 'success' })
+        }, 100)
+        // Reload data after toast is shown
+        setTimeout(() => {
+          loadCars()
+        }, 600)
+      } else {
+        setConfirmModal({ open: false, carId: null })
+        setTimeout(() => {
+          setToast({ visible: true, message: 'Không thể xóa xe', variant: 'error' })
+        }, 100)
       }
     } catch (error) {
-      setToast({ visible: true, message: 'Có lỗi xảy ra', variant: 'error' })
+      setConfirmModal({ open: false, carId: null })
+      setTimeout(() => {
+        setToast({ visible: true, message: 'Có lỗi xảy ra', variant: 'error' })
+      }, 100)
     }
   }
 
@@ -132,18 +162,18 @@ export default function AdminCarsPage() {
         enableSorting: false,
       },
       {
-      id: 'actions',
-      header: 'Thao tác',
-      cell: ({ row }) => (
-        <div className="flex justify-end gap-3 items-center">
-          <a href={`/admin/cars/${row.original.id}`} className="text-luxury-gold hover:text-luxury-darkGold">
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z"/></svg>
-          </a>
-          <button onClick={() => handleDelete(row.original.id)} className="text-red-600 hover:text-red-900">
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
-          </button>
-        </div>
-      ),
+        id: 'actions',
+        header: 'Thao tác',
+        cell: ({ row }) => (
+          <div className="flex justify-end gap-3 items-center">
+            <a href={`/admin/cars/${row.original.id}`} className="text-luxury-gold hover:text-luxury-darkGold">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z" /></svg>
+            </a>
+            <button onClick={() => handleDeleteClick(row.original.id)} className="text-red-600 hover:text-red-900">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" /></svg>
+            </button>
+          </div>
+        ),
       },
     ],
     []
@@ -185,6 +215,15 @@ export default function AdminCarsPage() {
   return (
     <div>
       <Toast message={toast.message} visible={toast.visible} variant={toast.variant} onClose={() => setToast({ ...toast, visible: false })} />
+      <ConfirmModal
+        open={confirmModal.open}
+        title="Xác nhận xóa xe"
+        description="Bạn có chắc muốn xóa xe này? Thao tác này không thể hoàn tác."
+        confirmLabel="Xóa"
+        cancelLabel="Hủy"
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setConfirmModal({ open: false, carId: null })}
+      />
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <h1 className="text-3xl font-bold">Quản lý xe</h1>
         <a href="/admin/cars/create" className="btn-primary">
@@ -202,7 +241,7 @@ export default function AdminCarsPage() {
             placeholder="Tìm kiếm xe..."
             className="input-custom max-w-sm"
           />
-        
+
         </div>
       </div>
 
@@ -315,7 +354,7 @@ export default function AdminCarsPage() {
               »»
             </button>
           </div>
-        </div> 
+        </div>
       </div>
     </div>
   )
