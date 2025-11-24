@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
+import Toast from '@/components/Toast'
 
 export default function AdminSettingsPage() {
     const [smtpUser, setSmtpUser] = useState('')
@@ -10,7 +11,7 @@ export default function AdminSettingsPage() {
     const [lmstAdmin, setLmstAdmin] = useState('')
     const [zaloAdmin, setZaloAdmin] = useState('')
     const [facebookAdmin, setFacebookAdmin] = useState('')
-    const [message, setMessage] = useState('')
+    const [toast, setToast] = useState({ visible: false, message: '', variant: 'info' as 'info' | 'success' | 'error' | 'warning' })
 
     useEffect(() => {
         fetch('/api/settings')
@@ -46,33 +47,38 @@ export default function AdminSettingsPage() {
                 body: JSON.stringify({ key, value })
             })
 
-            if (res.ok) {
-                setMessage('Lưu thành công')
-                setTimeout(() => setMessage(''), 2000)
-            } else {
-                setMessage('Lưu thất bại')
+            if (!res.ok) {
+                throw new Error('Save failed')
             }
         } catch (err) {
-            setMessage('Có lỗi xảy ra')
+            throw err
         }
     }
 
     const handleSaveAll = async () => {
-        // Save SEND_MAIL first
-        await saveSetting('SEND_MAIL', sendMail ? 'true' : 'false')
-        if (sendMail) {
-            await saveSetting('SMTP_USER', smtpUser)
-            await saveSetting('SMTP_PASS', smtpPass)
+        try {
+            // Save SEND_MAIL first
+            await saveSetting('SEND_MAIL', sendMail ? 'true' : 'false')
+            if (sendMail) {
+                await saveSetting('SMTP_USER', smtpUser)
+                await saveSetting('SMTP_PASS', smtpPass)
+            }
+            // Save contact fields
+            await saveSetting('CONTACT_ADMIN', contactAdmin)
+            await saveSetting('MST_ADMIN', mstAdmin)
+            await saveSetting('ZALO_ADMIN', zaloAdmin)
+            await saveSetting('FACEBOOK_ADMIN', facebookAdmin)
+
+            // Show success toast
+            setToast({ visible: true, message: 'Lưu cấu hình thành công!', variant: 'success' })
+        } catch (err) {
+            setToast({ visible: true, message: 'Có lỗi xảy ra khi lưu', variant: 'error' })
         }
-        // Save contact fields
-        await saveSetting('CONTACT_ADMIN', contactAdmin)
-        await saveSetting('MST_ADMIN', mstAdmin)
-        await saveSetting('ZALO_ADMIN', zaloAdmin)
-        await saveSetting('FACEBOOK_ADMIN', facebookAdmin)
     }
 
     return (
         <div>
+            <Toast message={toast.message} visible={toast.visible} variant={toast.variant} onClose={() => setToast({ ...toast, visible: false })} />
             <h1 className="text-3xl font-bold mb-6">Cấu hình</h1>
 
             <div className="bg-white shadow rounded-lg p-6 max-w-2xl">
@@ -126,7 +132,6 @@ export default function AdminSettingsPage() {
 
                 <div className="flex items-center gap-3">
                     <button onClick={handleSaveAll} className="btn-primary">Lưu</button>
-                    {message && <div className="text-sm text-green-600">{message}</div>}
                 </div>
             </div>
         </div>

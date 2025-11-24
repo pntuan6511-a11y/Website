@@ -29,7 +29,7 @@ export default function BangGiaPage() {
     e.preventDefault()
     setIsSubmitting(true)
     const formData = new FormData(e.currentTarget)
-    
+
     const data = {
       fullName: formData.get('fullName'),
       phone: formData.get('phone'),
@@ -62,18 +62,18 @@ export default function BangGiaPage() {
       <Toast message={toast.message} visible={toast.visible} onClose={() => setToast({ ...toast, visible: false })} />
       <div className="container-custom">
         <h1 className="text-4xl md:text-5xl font-bold text-center mb-12">Bảng giá xe VinFast</h1>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {cars.map((car) => {
             const mainImage = car.images?.find((img: any) => img.imageType === 'main')?.imageUrl || car.mainImage
             return (
-            <div key={car.id} className="card-luxury overflow-hidden relative">
-              {car.tag && TAG_META[car.tag] ? (
-                (() => {
-                  const meta = TAG_META[car.tag]
-                  return (
-                    <div className={`absolute top-3 right-3 ${meta.colorClass} px-3 py-1 rounded text-sm font-semibold z-10 flex items-center gap-2`}>
-                      {/* {meta.icon === 'hot' && (
+              <div key={car.id} className="card-luxury overflow-hidden relative">
+                {car.tag && TAG_META[car.tag] ? (
+                  (() => {
+                    const meta = TAG_META[car.tag]
+                    return (
+                      <div className={`absolute top-3 right-3 ${meta.colorClass} px-3 py-1 rounded text-sm font-semibold z-10 flex items-center gap-2`}>
+                        {/* {meta.icon === 'hot' && (
                         <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 2v6"/><path d="M6 8c0 4 6 6 6 12"/></svg>
                       )}
                       {meta.icon === 'new' && (
@@ -82,52 +82,55 @@ export default function BangGiaPage() {
                       {meta.icon === 'sale' && (
                         <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M3 12l9 9 9-9-9-9-9 9z"/></svg>
                       )} */}
-                      <span>{meta.label}</span>
-                    </div>
-                  )
-                })()
-              ) : null}
-              {mainImage && (
-                <div className="relative h-64">
-                  <Image
-                    src={mainImage}
-                    alt={car.name}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              )}
-              <div className="p-6">
-                <h2 className="text-2xl font-bold mb-4">{car.name}</h2>
-                
-                {/* Versions List */}
-                {car.versions && car.versions.length > 0 && (
-                  <div className="mb-6 space-y-3">
-                    {car.versions.map((version: any) => (
-                      <div key={version.id} className="flex justify-between items-start py-2 border-b border-gray-200 last:border-0">
-                        <span className="text-sm text-gray-700 flex-1">{version.name}</span>
-                        <span className="text-luxury-gold font-semibold text-sm ml-2 whitespace-nowrap">
-                          {Number(version.price).toLocaleString('vi-VN')} đ
-                        </span>
+                        <span>{meta.label}</span>
                       </div>
-                    ))}
+                    )
+                  })()
+                ) : null}
+                {mainImage && (
+                  <div className="relative h-64">
+                    <Image
+                      src={mainImage}
+                      alt={car.name}
+                      fill
+                      className="object-cover"
+                    />
                   </div>
                 )}
-                
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <Link href="/du-toan-chi-phi" className="btn-outline text-center flex-1">
-                    Dự toán chi phí
+                <div className="p-6">
+                  <Link href={`/xe/${car.slug}`}>
+                    <h2 className="text-2xl font-bold mb-4 hover:text-luxury-gold transition-colors cursor-pointer">{car.name}</h2>
                   </Link>
-                    <button 
+
+                  {/* Versions List */}
+                  {car.versions && car.versions.length > 0 && (
+                    <div className="mb-6 space-y-3">
+                      {car.versions.map((version: any) => (
+                        <div key={version.id} className="flex justify-between items-start py-2 border-b border-gray-200 last:border-0">
+                          <span className="text-sm text-gray-700 flex-1">{version.name}</span>
+                          <span className="text-luxury-gold font-semibold text-sm ml-2 whitespace-nowrap">
+                            {Number(version.price).toLocaleString('vi-VN')} đ
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <Link href="/du-toan-chi-phi" className="btn-outline text-center flex-1">
+                      Dự toán chi phí
+                    </Link>
+                    <button
                       onClick={() => handleTestDrive(car)}
                       className="btn-primary flex-1"
                     >
                       Đăng ký lái thử
                     </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          )})}
+            )
+          })}
         </div>
       </div>
 

@@ -163,7 +163,7 @@ export default function AdminCarsPage() {
       },
       {
         id: 'actions',
-        header: 'Thao tác',
+        header: '',
         cell: ({ row }) => (
           <div className="flex justify-end gap-3 items-center">
             <a href={`/admin/cars/${row.original.id}`} className="text-luxury-gold hover:text-luxury-darkGold">

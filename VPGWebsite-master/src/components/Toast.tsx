@@ -22,8 +22,7 @@ export default function Toast({ message, visible, variant = 'info', onClose }: T
       className={`fixed left-1/2 top-4 transform -translate-x-1/2 transition-all duration-300 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-6 pointer-events-none'
         }`}
     >
-      <div className={`min-w-[280px] rounded-md shadow-lg px-4 py-3 text-sm ${variant === 'success' ? 'bg-green-600 text-white' : variant === 'error' ? 'bg-red-600 text-white' : variant === 'warning' ? 'bg-yellow-500 text-black' : 'bg-luxury-charcoal text-white'
-        }`}>
+      <div className={`min-w-[280px] rounded-md shadow-lg px-4 py-3 text-sm bg-green-100 ${variant === 'error' ? 'text-white' : variant === 'warning' ? 'text-black' : variant === 'info' ? 'text-white' : 'text-green-900'}`}>
         {message}
       </div>
     </div>

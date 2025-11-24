@@ -102,38 +102,66 @@ export default function AdminTestDrivesPage() {
           const st = row.original.status
           const handleChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
             const newStatus = parseInt(e.target.value)
+            const statusNames = {
+              1: 'Chờ xử lý',
+              2: 'Đã liên hệ',
+              3: 'Hoàn thành'
+            }
+
             try {
               const res = await fetch(`/api/test-drives/${row.original.id}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ status: newStatus })
               })
-              if (res.ok) loadTestDrives()
+              if (res.ok) {
+                loadTestDrives()
+                setToast({
+                  visible: true,
+                  message: `Đã cập nhật trạng thái cho khách hàng "${row.original.fullName}" thành "${statusNames[newStatus as keyof typeof statusNames]}"`,
+                  variant: 'success'
+                })
+              }
             } catch (err) {
               setToast({ visible: true, message: 'Không thể cập nhật trạng thái', variant: 'error' })
             }
           }
 
+          const statusStyles = {
+            1: 'bg-yellow-100 text-yellow-700 border-yellow-200',
+            2: 'bg-blue-100 text-blue-700 border-blue-200',
+            3: 'bg-green-100 text-green-700 border-green-200'
+          }
+
           return (
-            <select defaultValue={st || 1} onChange={handleChange} className="input-custom max-w-xs">
-              <option value={1}>Pending</option>
-              <option value={2}>Contacted</option>
-              <option value={3}>Completed</option>
-            </select>
+            <div className="relative inline-block">
+              <select
+                defaultValue={st || 1}
+                onChange={handleChange}
+                className={`appearance-none px-3 py-1.5 pr-8 rounded-full text-sm font-medium cursor-pointer border transition-colors hover:opacity-80 ${statusStyles[st as keyof typeof statusStyles] || statusStyles[1]}`}
+              >
+                <option value={1}>Chờ xử lý</option>
+                <option value={2}>Đã liên hệ</option>
+                <option value={3}>Hoàn thành</option>
+              </select>
+              <svg className="w-4 h-4 absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
           )
         },
         enableSorting: false,
       },
       {
-      id: 'actions',
-      header: 'Thao tác',
-      cell: ({ row }) => (
-        <div className="flex justify-end">
-          <button onClick={() => handleDelete(row.original.id)} className="text-red-600 hover:text-red-900">
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
-          </button>
-        </div>
-      ),
+        id: 'actions',
+        header: '',
+        cell: ({ row }) => (
+          <div className="flex justify-end">
+            <button onClick={() => handleDelete(row.original.id)} className="text-red-600 hover:text-red-900">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" /></svg>
+            </button>
+          </div>
+        ),
       },
     ],
     []

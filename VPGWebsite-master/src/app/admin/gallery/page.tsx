@@ -19,7 +19,7 @@ export default function AdminGalleryPage() {
   useEffect(() => { loadUploads() }, [])
 
   const loadBanners = () => {
-    fetch('/api/car-images')
+    fetch(`/api/car-images?t=${Date.now()}`, { cache: 'no-store' })
       .then(res => res.json())
       .then(data => {
         setBanners(data.filter((i: any) => i.imageType === 'banner'))
@@ -28,7 +28,7 @@ export default function AdminGalleryPage() {
   }
 
   const loadUploads = () => {
-    fetch('/api/uploads')
+    fetch(`/api/uploads?t=${Date.now()}`, { cache: 'no-store' })
       .then(res => res.json())
       .then(data => setUploads(data))
       .catch(err => console.error(err))
@@ -103,7 +103,7 @@ export default function AdminGalleryPage() {
     if (!deleteTarget) return
     try {
       if (deleteTarget.type === 'banner') {
-        const res = await fetch(`/api/car-images/${deleteTarget.id}`, { method: 'DELETE' })
+        const res = await fetch(`/api/car-images/${deleteTarget.id}`, { method: 'DELETE', cache: 'no-store' })
         if (res.ok) {
           setToast({ visible: true, message: 'Xóa thành công', variant: 'success' })
           loadBanners()
@@ -111,7 +111,7 @@ export default function AdminGalleryPage() {
           setToast({ visible: true, message: 'Không thể xóa banner', variant: 'error' })
         }
       } else if (deleteTarget.type === 'upload') {
-        const res = await fetch('/api/uploads', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: deleteTarget.name }) })
+        const res = await fetch('/api/uploads', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: deleteTarget.name }), cache: 'no-store' })
         const data = await res.json()
         if (res.ok) {
           setToast({ visible: true, message: 'Xóa thành công', variant: 'success' })
@@ -133,7 +133,7 @@ export default function AdminGalleryPage() {
     <div>
       <Toast message={toast.message} visible={toast.visible} variant={toast.variant} onClose={() => setToast({ ...toast, visible: false })} />
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold">Quản lý banner website</h1>
+        <h1 className="text-3xl font-bold">Thư viện ảnh</h1>
       </div>
 
       <div className="bg-white shadow rounded-lg py-3 px-6 mb-6">
