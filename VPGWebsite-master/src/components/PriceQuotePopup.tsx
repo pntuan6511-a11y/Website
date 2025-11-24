@@ -36,7 +36,7 @@ export default function PriceQuotePopup() {
       }
     }
 
-    const t = setTimeout(() => setShow(true), 15000)
+    const t = setTimeout(() => setShow(true), 10000)
     return () => clearTimeout(t)
   }, [])
 
@@ -96,7 +96,7 @@ export default function PriceQuotePopup() {
         <div className="bg-white rounded-lg p-6 max-w-lg w-full">
           <h3 className="text-xl font-bold mb-4">Nhận báo giá</h3>
           <form onSubmit={handleSubmit}>
-            <div className="text-sm text-gray-700 mb-4">Quý khách vui lòng liên hệ
+            <div className="text-base text-gray-700 mb-4">Quý khách vui lòng liên hệ
               {contactAdmin ? (
                 <a href={`tel:${contactAdmin.replace(/\D/g, '')}`} className="text-red-500 font-semibold px-2 py-0.5 rounded-sm hover:underline">{formatPhoneNumber(contactAdmin)}</a>
               ) : (
