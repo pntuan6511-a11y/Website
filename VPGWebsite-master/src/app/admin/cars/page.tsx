@@ -66,7 +66,7 @@ export default function AdminCarsPage() {
   }, [])
 
   const loadCars = () => {
-    fetch('/api/cars')
+    fetch('/api/admin/cars')
       .then(res => res.json())
       .then(data => setCars(data))
       .catch(err => console.error(err))

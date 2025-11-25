@@ -19,7 +19,7 @@ export default function AdminGalleryPage() {
   useEffect(() => { loadUploads() }, [])
 
   const loadBanners = () => {
-    fetch(`/api/car-images?t=${Date.now()}`, { cache: 'no-store' })
+    fetch('/api/admin/car-images')
       .then(res => res.json())
       .then(data => {
         setBanners(data.filter((i: any) => i.imageType === 'banner'))

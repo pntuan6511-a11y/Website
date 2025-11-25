@@ -35,12 +35,7 @@ export default function AdminCustomersPage() {
 
   const loadCustomers = () => {
     console.log('Loading customers...')
-    fetch('/api/customers', {
-      cache: 'no-store',
-      headers: {
-        'Cache-Control': 'no-cache'
-      }
-    })
+    fetch('/api/admin/customers')
       .then(res => res.json())
       .then(data => {
         console.log('Loaded customers:', data.length)
