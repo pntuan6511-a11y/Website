@@ -49,9 +49,7 @@ export default function RootLayout({
           type="image/webp"
         />
 
-        {/* Icons and manifest */}
-        <link rel="icon" href="/default/fa-icon.png" type="image/png" />
-        <link rel="apple-touch-icon" href="/default/fa-icon.png" />
+        {/* Manifest */}
         <link rel="manifest" href="/manifest.json" />
 
         {/* Structured Data */}

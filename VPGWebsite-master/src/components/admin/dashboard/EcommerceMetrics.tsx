@@ -20,7 +20,7 @@ export const EcommerceMetrics: React.FC<EcommerceMetricsProps> = ({ summary }) =
     ];
 
     return (
-        <section className="p-6 bg-gray-50 rounded-xl space-y-8">
+        <section className="p-2 bg-gray-50 rounded-xl space-y-8">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">Thống kê tổng quan</h2>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 xl:grid-cols-4">
                 {/* Cars */}
@@ -65,10 +65,10 @@ export const EcommerceMetrics: React.FC<EcommerceMetricsProps> = ({ summary }) =
                 </div>
             </div>
 
-            <div className="bg-white rounded-xl shadow-md p-6">
+            {/* <div className="bg-white rounded-xl shadow-md p-6">
                 <h3 className="text-lg font-semibold text-gray-800 mb-4">Xe có nhu cầu báo giá & lái thử cao nhất</h3>
                 <SimpleBarChart data={topCars} />
-            </div>
+            </div> */}
         </section>
     );
 };

@@ -93,12 +93,12 @@ export default function BangGiaPage() {
                       src={mainImage}
                       alt={car.name}
                       fill
-                      className="object-cover"
+                      className="object-contain"
                     />
                   </div>
                 )}
                 <div className="p-6">
-                  <Link href={`/xe/${car.slug}`}>
+                  <Link href={`/san-pham/${car.slug}`}>
                     <h2 className="text-2xl font-bold mb-4 hover:text-luxury-gold transition-colors cursor-pointer">{car.name}</h2>
                   </Link>
 

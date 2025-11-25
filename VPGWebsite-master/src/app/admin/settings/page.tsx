@@ -101,7 +101,7 @@ export default function AdminSettingsPage() {
                         <div className="mb-4">
                             <label className="block text-sm font-medium text-gray-700 mb-1">Mật khẩu SMTP (SMTP_PASS)</label>
                             <input type="password" value={smtpPass} onChange={(e) => setSmtpPass(e.target.value)} className="input-custom w-full" disabled={!sendMail} />
-                            <p className='text-sm text-gray-600'>Truy cập vào tài khoản Google của mình (Đã xác thực 2 lớp), vào mục "Bảo mật", tìm phần "Mật khẩu ứng dụng" để tạo một mật khẩu riêng cho việc này</p>
+                            <p className='text-sm text-gray-600'>Truy cập vào tài khoản Google của mình (Đã xác thực 2 lớp), <br />vào mục "Bảo mật", tìm phần <a className="text-blue-500 hover:underline" href='https://myaccount.google.com/signinoptions/twosv?pli=1&rapt=AEjHL4MXsYxzlc48nkswcFRR5QYJKF3VejA4RwEkTPS7uea3aAZbU4pIXIUNb6aUAU9KodxYdKp4g7aKAqAfRWqQ2xvODkt2AGOT0ONjdYRloZUqvYSJObI'>"Mật khẩu ứng dụng"</a> để tạo một mật khẩu riêng cho việc này.</p>
 
                         </div>
                     </>

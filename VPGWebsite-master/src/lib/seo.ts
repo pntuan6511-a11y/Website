@@ -13,7 +13,7 @@ interface SEOConfig {
 const DEFAULT_SITE_NAME = 'VinFast VFG An Giang'
 const DEFAULT_DESCRIPTION = 'Đại lý ủy quyền chính thức của VinFast tại An Giang. Cung cấp đầy đủ các dòng xe VinFast với giá tốt nhất, dịch vụ tư vấn chuyên nghiệp.'
 const DEFAULT_KEYWORDS = 'VinFast, xe điện, ô tô điện, VF8, VF9, VF5, VFe34, đại lý VinFast, mua xe VinFast, giá xe VinFast'
-const DEFAULT_IMAGE = '/images/default-og.jpg'
+const DEFAULT_IMAGE = '/images/default-og.webp'
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://vinfast3s-angiang.com'
 
 export function generateSEO(config: SEOConfig): Metadata {
@@ -26,7 +26,7 @@ export function generateSEO(config: SEOConfig): Metadata {
     type = 'website',
     siteName = DEFAULT_SITE_NAME,
   } = config
-  
+
   const ogType = type === 'product' ? 'website' : type
 
   const fullTitle = title ? `${title} | ${siteName}` : siteName
@@ -80,7 +80,7 @@ export function generateSEO(config: SEOConfig): Metadata {
 export function generateCarStructuredData(car: any) {
   const mainImage = car.images?.find((img: any) => img.imageType === 'main')?.imageUrl || car.ogImage || car.mainImage
   const mainImageUrl = mainImage ?? undefined
-  const lowestPrice = car.versions?.length > 0 
+  const lowestPrice = car.versions?.length > 0
     ? Math.min(...car.versions.map((v: any) => Number(v.price)))
     : 0
 
