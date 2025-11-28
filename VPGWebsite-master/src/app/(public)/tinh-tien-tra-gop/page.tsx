@@ -4,12 +4,19 @@ import { useEffect, useState } from 'react'
 import { useSettings } from '@/context/SettingsContext'
 import { formatPhoneNumber } from '@/utils/format'
 
+interface InterestRate {
+  id: string
+  rate: number
+  label: string | null
+}
+
 export default function InstallmentCalculatorPage() {
   const [cars, setCars] = useState<any[]>([])
   const [selectedCar, setSelectedCar] = useState<any>(null)
   const [selectedVersion, setSelectedVersion] = useState<any>(null)
   const [loanPercent, setLoanPercent] = useState(80)
   const [years, setYears] = useState(8)
+  const [interestRates, setInterestRates] = useState<InterestRate[]>([])
   const [interestRate, setInterestRate] = useState(6.8)
   const [result, setResult] = useState<any>(null)
   const { contactAdmin } = useSettings()
@@ -19,6 +26,32 @@ export default function InstallmentCalculatorPage() {
       .then(res => res.json())
       .then(data => setCars(data))
       .catch(err => console.error(err))
+
+    // Fetch interest rates
+    fetch('/api/interest-rates')
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.length > 0) {
+          setInterestRates(data)
+          setInterestRate(Number(data[0].rate))
+        } else {
+          // Default rates if none configured
+          setInterestRates([
+            { id: 'default-1', rate: 6.8, label: null },
+            { id: 'default-2', rate: 7.9, label: null }
+          ])
+          setInterestRate(6.8)
+        }
+      })
+      .catch(err => {
+        console.error(err)
+        // Fallback to default rates on error
+        setInterestRates([
+          { id: 'default-1', rate: 6.8, label: null },
+          { id: 'default-2', rate: 7.9, label: null }
+        ])
+        setInterestRate(6.8)
+      })
   }, [])
 
   const handleCarChange = (carId: string) => {
@@ -176,27 +209,19 @@ export default function InstallmentCalculatorPage() {
 
               <div className="md:col-span-2">
                 <label className="block mb-2 font-medium">Lãi suất</label>
-                <div className="flex gap-4">
-                  <label className="flex items-center">
-                    <input
-                      type="radio"
-                      value="6.8"
-                      checked={interestRate === 6.8}
-                      onChange={() => setInterestRate(6.8)}
-                      className="mr-2"
-                    />
-                    6.8%
-                  </label>
-                  <label className="flex items-center">
-                    <input
-                      type="radio"
-                      value="7.9"
-                      checked={interestRate === 7.9}
-                      onChange={() => setInterestRate(7.9)}
-                      className="mr-2"
-                    />
-                    7.9%
-                  </label>
+                <div className="flex flex-wrap gap-4">
+                  {interestRates.map((rate) => (
+                    <label key={rate.id} className="flex items-center">
+                      <input
+                        type="radio"
+                        value={rate.rate}
+                        checked={interestRate === Number(rate.rate)}
+                        onChange={() => setInterestRate(Number(rate.rate))}
+                        className="mr-2"
+                      />
+                      {rate.rate}%{rate.label && ` (${rate.label})`}
+                    </label>
+                  ))}
                 </div>
               </div>
             </div>

@@ -58,6 +58,11 @@ const navItems: NavItem[] = [
         path: "/admin/gallery",
     },
     {
+        name: "Lãi suất",
+        icon: <PieChartIcon />,
+        path: "/admin/interest-rates",
+    },
+    {
         name: "Cấu hình",
         icon: <BoxCubeIcon />,
         path: "/admin/settings",
