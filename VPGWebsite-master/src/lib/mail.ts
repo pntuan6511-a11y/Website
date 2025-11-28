@@ -9,7 +9,7 @@ import { prisma } from '@/lib/prisma'
 
 const SMTP_HOST = process.env.SMTP_HOST || ''
 const SMTP_PORT = Number(process.env.SMTP_PORT || 587)
-const EMAIL_ADMIN = process.env.EMAIL_ADMIN || ''
+const EMAIL_ADMIN = process.env.SMTP_USER || ''
 const EMAIL_FROM_NAME = process.env.EMAIL_FROM_NAME || ''
 const SEND_MAIL = String(process.env.SEND_MAIL || 'true').toLowerCase() === 'true'
 
@@ -59,7 +59,7 @@ export async function sendEmailToAdmin({ subject, text, html, to }: MailOptions)
   debugger
   const { user: SMTP_USER, pass: SMTP_PASS } = await loadSmtpFromDb()
 
-  if (!SMTP_HOST || !SMTP_USER || !SMTP_PASS || !EMAIL_ADMIN) {
+  if (!SMTP_HOST || !SMTP_USER || !SMTP_PASS || !SMTP_USER) {
     console.warn('SMTP not configured: missing settings or env vars')
     return
   }
@@ -79,7 +79,7 @@ export async function sendEmailToAdmin({ subject, text, html, to }: MailOptions)
 
   const mailOptions = {
     from: fromHeader,
-    to: to || EMAIL_ADMIN,
+    to: to || SMTP_USER,
     subject,
     text,
     html
